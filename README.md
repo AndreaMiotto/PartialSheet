@@ -9,9 +9,9 @@ A custom modifier to present a Partial Modal Sheet based on his content size.
 - Variable height based on his content
 - Customizable
 - iOS compatibility
+- Landscape compatibility
 
 ## Upcoming Features
-- Landscape compatibility
 - iPad compatibility
 - Mac compatibility
 
