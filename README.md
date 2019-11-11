@@ -2,6 +2,8 @@
 
 A custom modifier to present a Partial Modal Sheet based on his content size.
 
+<img src="https://user-images.githubusercontent.com/11211914/68591775-c5970800-0491-11ea-8cf9-61746d253902.gif" width="200">
+
 ## Features:
 - Slidable and dismiss with drag gesture
 - Variable height based on his content
