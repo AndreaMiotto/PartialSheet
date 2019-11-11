@@ -8,7 +8,7 @@ A custom modifier to present a Partial Modal Sheet based on his content size.
 - Customizable
 - iOS compatibility
 
-## Upcoming Freatures
+## Upcoming Features
 - Landscape compatibility
 - iPad compatibility
 - Mac compatibility
