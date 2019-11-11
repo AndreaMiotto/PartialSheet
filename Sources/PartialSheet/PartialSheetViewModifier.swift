@@ -40,7 +40,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
 
 	/// The point for the top anchor
 	private var topAnchor: CGFloat {
-		return presenterContentRect.height + 50 - sheetContentRect.height
+		return max(presenterContentRect.height - sheetContentRect.height, 110)
 	}
 
 	/// The he point for the bottom anchor
@@ -86,9 +86,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
 		let drag = DragGesture()
 			.updating($dragState) { drag, state, _ in
 				/// Set a cap of + 100 for the elastic pull and check if the slide do not corss the presenter height
-				if self.presented,
-					-drag.translation.height + self.sheetContentRect.height < self.presenterContentRect.height - 60,
-					drag.translation.height > -100 {
+				if drag.translation.height > -50 {
 					state = .dragging(translation: drag.translation)
 				}
 		}
