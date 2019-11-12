@@ -1,17 +1,19 @@
 # PartialSheet
 
-A custom modifier to present a Partial Modal Sheet based on his content size.
+A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
 
 <img src="https://user-images.githubusercontent.com/11211914/68591775-c5970800-0491-11ea-8cf9-61746d253902.gif" width="250">
 
 ## Features:
-- Slidable and dismiss with drag gesture
+- Slidable and dismissable with drag gesture
 - Variable height based on his content
 - Customizable
 - iOS compatibility
 - Landscape compatibility
 
-## Upcoming Features
+## Upcoming Features - Looking for collaborators
+- ScrcrollViews compatibility
+- List compatibility
 - iPad compatibility
 - Mac compatibility
 
@@ -27,7 +29,7 @@ You can do that under the **Preferences** panel of your Xcode, in the **Accounts
 
 ##  How to Use
 
-To use the **Partiartal Sheet** just attach the new modifier:
+To use the **Partial Sheet** just attach the new modifier:
 
 ```Swift
 YourView
