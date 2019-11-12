@@ -90,20 +90,24 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         // Build the drag gesture
         let drag = DragGesture()
             .updating($dragState) { drag, state, _ in
-                /// Set a cap of + 100 for the elastic pull and check if the slide do not corss the presenter height
+                let yOffset = drag.translation.height
                 let threshold = CGFloat(-50)
                 let stiffness = CGFloat(0.3)
-                if drag.translation.height > threshold {
+                if yOffset > threshold {
                     state = .dragging(translation: drag.translation)
-                } else {
-                    let distance = drag.translation.height - threshold
+                } else if
+                    // if above threshold and belove ScreenHeight make it elastic
+                    -yOffset + self.sheetContentRect.height <
+                        UIScreen.main.bounds.height + self.handlerSectionHeight
+                {
+                    let distance = yOffset - threshold
                     let translationHeight = threshold + (distance * stiffness)
                     state = .dragging(translation: CGSize(width: drag.translation.width, height: translationHeight))
                 }
         }
         .onEnded(onDragEnded)
         
-        return ZStack(alignment: Alignment.bottom) {
+        return ZStack {
             // Attach the cover view
             if presented && enableCover {
                 Rectangle()
