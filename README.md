@@ -2,26 +2,34 @@
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
 
-<img src="https://user-images.githubusercontent.com/11211914/68591775-c5970800-0491-11ea-8cf9-61746d253902.gif" width="250">
+<img src="https://user-images.githubusercontent.com/11211914/68700576-6c100580-0585-11ea-847b-99f0450311a4.gif" width="250">
+<img src="https://user-images.githubusercontent.com/11211914/68700574-6c100580-0585-11ea-9727-8a02ec36b118.gif" width="250">
+
 
 ## Features
 
-### Availables
+#### Availables
 - \[x]  Slidable and dismissable with drag gesture
 - \[x]  Variable height based on his content
 - \[x]  Customizable colors
 - \[x]  iOS compatibility
 - \[x]  Landscape compatibility
 
-### Upcoming
+#### Upcoming
 - \[ ] iPad compatibility
 - \[ ] Mac compatibility
 
-### Nice to have
+#### Nice to have
 - \[ ] ScrcrollView and List compatibility: as soon as Apple adds some API to handle better ScrollViews
 
-
 ## Installation
+
+#### Requirements
+- iOS 13.0+ / macOS 10.15+
+- Xcode 11.2+
+- Swift 5+
+
+#### Via Swift Package Manager
 
 In Xcode 11 or grater, in you project, select: `File > Swift Packages > Add Pacakage Dependency`.
 
