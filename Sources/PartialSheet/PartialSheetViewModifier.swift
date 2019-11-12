@@ -91,8 +91,14 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         let drag = DragGesture()
             .updating($dragState) { drag, state, _ in
                 /// Set a cap of + 100 for the elastic pull and check if the slide do not corss the presenter height
-                if drag.translation.height > -50 {
+                let threshold = CGFloat(-50)
+                let stiffness = CGFloat(0.3)
+                if drag.translation.height > threshold {
                     state = .dragging(translation: drag.translation)
+                } else {
+                    let distance = drag.translation.height - threshold
+                    let translationHeight = threshold + (distance * stiffness)
+                    state = .dragging(translation: CGSize(width: drag.translation.width, height: translationHeight))
                 }
         }
         .onEnded(onDragEnded)
