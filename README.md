@@ -4,18 +4,21 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 
 <img src="https://user-images.githubusercontent.com/11211914/68591775-c5970800-0491-11ea-8cf9-61746d253902.gif" width="250">
 
-## Features:
-- Slidable and dismissable with drag gesture
-- Variable height based on his content
-- Customizable
-- iOS compatibility
-- Landscape compatibility
+## Features
 
-## Upcoming Features - Looking for collaborators
-- ScrcrollViews compatibility
-- List compatibility
-- iPad compatibility
-- Mac compatibility
+### Availables
+- \[x]  Slidable and dismissable with drag gesture
+- \[x]  Variable height based on his content
+- \[x]  Customizable colors
+- \[x]  iOS compatibility
+- \[x]  Landscape compatibility
+
+### Upcoming
+- \[ ] iPad compatibility
+- \[ ] Mac compatibility
+
+### Nice to have
+- \[ ] ScrcrollView and List compatibility: as soon as Apple adds some API to handle better ScrollViews
 
 
 ## Installation
