@@ -101,8 +101,6 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         return AnyView(EmptyView())
                     }
             )
-            sheet()
-                .edgesIgnoringSafeArea(.vertical)
             .padding(.bottom, self.offset)
             .onAppear{
                 let notifier = NotificationCenter.default
@@ -121,6 +119,8 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                 let notifier = NotificationCenter.default
                 notifier.removeObserver(self)
             }
+            sheet()
+                .edgesIgnoringSafeArea(.vertical)
         }
     }
     
