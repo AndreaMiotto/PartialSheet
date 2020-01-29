@@ -9,25 +9,53 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var editing:Bool = true
-    @State private var text:String = "some text"
+    @State private var modalPresented: Bool = true
+    @State private var longer: Bool = false
+    @State private var text: String = "some text"
+
     var body: some View {
-        VStack(alignment: .center) {
-            Button(action: { self.editing.toggle() } ) {
-                Text("Hello, World!")
+        NavigationView {
+
+            VStack {
+                Text("""
+                Hi, this is the Partial Sheet modifier.
+                It allows you to dispaly a totally custom sheet with a relative height based on his content.
+                In this way the sheet will cover the screen only for the space it will need
+                """)
+                Spacer()
+                Button(action: {
+                    self.modalPresented = true
+                }, label: {
+                    Text("Display the Partial Shehet")
+                })
+                    .padding()
+                Spacer()
             }
-            Spacer()
+            .padding()
+            .navigationBarTitle("Partial Sheet")
         }
-        .padding()
-        .partialSheet(
-            presented: self.$editing,
-            backgroundColor: Color.white,
-            handlerBarColor: Color.gray,
-            enableCover: true,
-            coverColor: Color.black.opacity(0.6)) {
-                VStack(alignment: .center) {
-                    TextField("input", text: self.$text)
-                }.padding()
+        .partialSheet(presented: $modalPresented) {
+            VStack {
+                Group {
+                    Text("Settings Panel")
+                        .font(.subheadline)
+                    
+                    TextField("TextField", text: self.$text)
+                        
+                    Toggle(isOn: self.$longer) {
+                        Text("Advanced")
+                    }
+                    
+                }
+                .padding()
+                .frame(height: 50)
+                if self.longer {
+                    VStack {
+                        Text("More settings here...")
+                    }
+                    .frame(height: 200)
+                }
+            }
         }
     }
 }
