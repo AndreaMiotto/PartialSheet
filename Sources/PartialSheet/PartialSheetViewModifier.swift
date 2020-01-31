@@ -38,6 +38,9 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     /// The rect containing the content
     @State private var sheetContentRect: CGRect = .zero
     
+    /// The offset for keyboard height
+    @State private var offset: CGFloat = 0
+    
     /// The point for the top anchor
     private var topAnchor: CGFloat {
         return max(presenterContentRect.height - sheetContentRect.height - handlerSectionHeight, 110)
@@ -60,6 +63,24 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         return 30
     }
     
+    private func keyboardShow(notification:Notification) {
+        let endFrame = UIResponder.keyboardFrameEndUserInfoKey
+        if let rect:CGRect = notification.userInfo![endFrame] as? CGRect {
+            let height = rect.height
+            let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
+            self.offset = height - (bottomInset ?? 0)
+        }
+    }
+    
+    private func keyboardHide(notification:Notification) {
+        self.offset = 0
+    }
+    
+    private func dismissKeyboard() {
+        let resign = #selector(UIResponder.resignFirstResponder)
+        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+    }
+    
     /// The Gesture State for the drag gesture
     @GestureState private var dragState = DragState.inactive
     
@@ -80,6 +101,24 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         return AnyView(EmptyView())
                     }
             )
+            .padding(.bottom, self.offset)
+            .onAppear{
+                let notifier = NotificationCenter.default
+                let willShow = UIResponder.keyboardWillShowNotification
+                let willHide = UIResponder.keyboardWillHideNotification
+                notifier.addObserver(forName: willShow,
+                                     object: nil,
+                                     queue: .main,
+                                     using: self.keyboardShow)
+                notifier.addObserver(forName: willHide,
+                                     object: nil,
+                                     queue: .main,
+                                     using: self.keyboardHide)
+            }
+            .onDisappear {
+                let notifier = NotificationCenter.default
+                notifier.removeObserver(self)
+            }
             sheet()
                 .edgesIgnoringSafeArea(.vertical)
         }
@@ -116,6 +155,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                     .onTapGesture {
                         withAnimation {
                             self.presented = false
+                            self.dismissKeyboard()
                         }
                 }
             }
