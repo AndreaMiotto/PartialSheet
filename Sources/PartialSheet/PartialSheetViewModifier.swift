@@ -63,24 +63,6 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         return 30
     }
     
-    private func keyboardShow(notification:Notification) {
-        let endFrame = UIResponder.keyboardFrameEndUserInfoKey
-        if let rect:CGRect = notification.userInfo![endFrame] as? CGRect {
-            let height = rect.height
-            let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
-            self.offset = height - (bottomInset ?? 0)
-        }
-    }
-    
-    private func keyboardHide(notification:Notification) {
-        self.offset = 0
-    }
-    
-    private func dismissKeyboard() {
-        let resign = #selector(UIResponder.resignFirstResponder)
-        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
-    }
-    
     /// The Gesture State for the drag gesture
     @GestureState private var dragState = DragState.inactive
     
@@ -101,19 +83,19 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         return AnyView(EmptyView())
                     }
             )
-            .padding(.bottom, self.offset)
-            .onAppear{
-                let notifier = NotificationCenter.default
-                let willShow = UIResponder.keyboardWillShowNotification
-                let willHide = UIResponder.keyboardWillHideNotification
-                notifier.addObserver(forName: willShow,
-                                     object: nil,
-                                     queue: .main,
-                                     using: self.keyboardShow)
-                notifier.addObserver(forName: willHide,
-                                     object: nil,
-                                     queue: .main,
-                                     using: self.keyboardHide)
+                .padding(.bottom, self.offset)
+                .onAppear{
+                    let notifier = NotificationCenter.default
+                    let willShow = UIResponder.keyboardWillShowNotification
+                    let willHide = UIResponder.keyboardWillHideNotification
+                    notifier.addObserver(forName: willShow,
+                                         object: nil,
+                                         queue: .main,
+                                         using: self.keyboardShow)
+                    notifier.addObserver(forName: willHide,
+                                         object: nil,
+                                         queue: .main,
+                                         using: self.keyboardHide)
             }
             .onDisappear {
                 let notifier = NotificationCenter.default
@@ -129,6 +111,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         // Build the drag gesture
         let drag = DragGesture()
             .updating($dragState) { drag, state, _ in
+                self.dismissKeyboard()
                 let yOffset = drag.translation.height
                 let threshold = CGFloat(-50)
                 let stiffness = CGFloat(0.3)
@@ -174,17 +157,18 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                     VStack {
                         // Attach the content of the sheet
                         self.view()
-                            .background(
-                                GeometryReader { proxy -> AnyView in
-                                    let rect = proxy.frame(in: .global)
-                                    // This avoids an infinite layout loop
-                                    if rect.integral != self.sheetContentRect.integral {
-                                        DispatchQueue.main.async {
-                                            self.sheetContentRect = rect
-                                        }
+                            
+                        .background(
+                            GeometryReader { proxy -> AnyView in
+                                let rect = proxy.frame(in: .global)
+                                // This avoids an infinite layout loop
+                                if rect.integral != self.sheetContentRect.integral {
+                                    DispatchQueue.main.async {
+                                        self.sheetContentRect = rect
                                     }
-                                    return AnyView(EmptyView())
                                 }
+                                return AnyView(EmptyView())
+                            }
                         )
                     }
                     Spacer()
@@ -231,5 +215,31 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         } else {
             self.presented = (closestPosition == topAnchor)
         }
+    }
+    
+    
+    // MARK: - Keyboard Handlers Methods
+    
+    /// Add the keyboard offset
+    private func keyboardShow(notification: Notification) {
+        let endFrame = UIResponder.keyboardFrameEndUserInfoKey
+        if let rect: CGRect = notification.userInfo![endFrame] as? CGRect {
+            let height = rect.height
+            let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
+            self.offset = height - (bottomInset ?? 0)
+        }
+    }
+    
+    /// Remove the keyboard offset
+    private func keyboardHide(notification: Notification) {
+        DispatchQueue.main.async {
+            self.offset = 0
+        }
+    }
+    
+    /// Dismiss the keyboard
+    private func dismissKeyboard() {
+        let resign = #selector(UIResponder.resignFirstResponder)
+        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
     }
 }

@@ -41,6 +41,7 @@ struct ContentView: View {
                         .font(.subheadline)
                     
                     TextField("TextField", text: self.$text)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                         
                     Toggle(isOn: self.$longer) {
                         Text("Advanced")
