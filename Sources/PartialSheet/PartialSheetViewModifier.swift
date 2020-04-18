@@ -71,38 +71,56 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     func body(content: Content) -> some View {
         ZStack {
             content
-                .background(
-                    GeometryReader { proxy -> AnyView in
-                        let rect = proxy.frame(in: .global)
-                        // This avoids an infinite layout loop
-                        if rect.integral != self.presenterContentRect.integral {
-                            DispatchQueue.main.async {
-                                self.presenterContentRect = rect
+                .iPhone {
+                    $0
+                        .background(
+                            GeometryReader { proxy -> AnyView in
+                                let rect = proxy.frame(in: .global)
+                                // This avoids an infinite layout loop
+                                if rect.integral != self.presenterContentRect.integral {
+                                    DispatchQueue.main.async {
+                                        self.presenterContentRect = rect
+                                    }
+                                }
+                                return AnyView(EmptyView())
                             }
-                        }
-                        return AnyView(EmptyView())
+                    )
+                        .padding(.bottom, self.offset)
+                        .onAppear{
+                            let notifier = NotificationCenter.default
+                            let willShow = UIResponder.keyboardWillShowNotification
+                            let willHide = UIResponder.keyboardWillHideNotification
+                            notifier.addObserver(forName: willShow,
+                                                 object: nil,
+                                                 queue: .main,
+                                                 using: self.keyboardShow)
+                            notifier.addObserver(forName: willHide,
+                                                 object: nil,
+                                                 queue: .main,
+                                                 using: self.keyboardHide)
                     }
-            )
-                .padding(.bottom, self.offset)
-                .onAppear{
-                    let notifier = NotificationCenter.default
-                    let willShow = UIResponder.keyboardWillShowNotification
-                    let willHide = UIResponder.keyboardWillHideNotification
-                    notifier.addObserver(forName: willShow,
-                                         object: nil,
-                                         queue: .main,
-                                         using: self.keyboardShow)
-                    notifier.addObserver(forName: willHide,
-                                         object: nil,
-                                         queue: .main,
-                                         using: self.keyboardHide)
+                    .onDisappear {
+                        let notifier = NotificationCenter.default
+                        notifier.removeObserver(self)
+                    }
             }
-            .onDisappear {
-                let notifier = NotificationCenter.default
-                notifier.removeObserver(self)
+
+            .iPadAndMac {
+                $0
+                    .sheet(isPresented: $presented) {
+                        VStack {
+                            self.view()
+                            Spacer()
+                        }
+                }
             }
-            sheet()
-                .edgesIgnoringSafeArea(.vertical)
+
+            if deviceType == .iphone {
+                sheet()
+                    .edgesIgnoringSafeArea(.vertical)
+            }
+
+
         }
     }
     
@@ -158,17 +176,17 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         // Attach the content of the sheet
                         self.view()
                             
-                        .background(
-                            GeometryReader { proxy -> AnyView in
-                                let rect = proxy.frame(in: .global)
-                                // This avoids an infinite layout loop
-                                if rect.integral != self.sheetContentRect.integral {
-                                    DispatchQueue.main.async {
-                                        self.sheetContentRect = rect
+                            .background(
+                                GeometryReader { proxy -> AnyView in
+                                    let rect = proxy.frame(in: .global)
+                                    // This avoids an infinite layout loop
+                                    if rect.integral != self.sheetContentRect.integral {
+                                        DispatchQueue.main.async {
+                                            self.sheetContentRect = rect
+                                        }
                                     }
+                                    return AnyView(EmptyView())
                                 }
-                                return AnyView(EmptyView())
-                            }
                         )
                     }
                     Spacer()

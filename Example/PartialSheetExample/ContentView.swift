@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var modalPresented: Bool = true
+    @State private var modalPresented: Bool = false
     @State private var longer: Bool = false
     @State private var text: String = "some text"
 
@@ -34,6 +34,7 @@ struct ContentView: View {
             .padding()
             .navigationBarTitle("Partial Sheet")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .partialSheet(presented: $modalPresented) {
             VStack {
                 Group {

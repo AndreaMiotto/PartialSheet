@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01CCB63C244AEE3900F7F67F /* View+IfDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */; };
 		1DDC0E5923E3E6DB0033EC03 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC0E5823E3E6DB0033EC03 /* ContentView.swift */; };
 		1F177A6E23E1ECC3006F59D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F177A6D23E1ECC3006F59D0 /* AppDelegate.swift */; };
 		1F177A7023E1ECC3006F59D0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F177A6F23E1ECC3006F59D0 /* SceneDelegate.swift */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01CCB63A244AEC6100F7F67F /* PartialSheetExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PartialSheetExample.entitlements; sourceTree = "<group>"; };
+		01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+IfDeviceType.swift"; sourceTree = "<group>"; };
 		1DDC0E5823E3E6DB0033EC03 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = PartialSheetExample/ContentView.swift; sourceTree = SOURCE_ROOT; };
 		1F177A6A23E1ECC3006F59D0 /* PartialSheetExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PartialSheetExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F177A6D23E1ECC3006F59D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +63,7 @@
 		1F177A6C23E1ECC3006F59D0 /* PartialSheetExample */ = {
 			isa = PBXGroup;
 			children = (
+				01CCB63A244AEC6100F7F67F /* PartialSheetExample.entitlements */,
 				1F177A6D23E1ECC3006F59D0 /* AppDelegate.swift */,
 				1F177A6F23E1ECC3006F59D0 /* SceneDelegate.swift */,
 				1DDC0E5823E3E6DB0033EC03 /* ContentView.swift */,
@@ -85,6 +89,7 @@
 				1F177AA323E1F0E0006F59D0 /* PartialSheetViewModifier.swift */,
 				1F177AA423E1F0E0006F59D0 /* DragState.swift */,
 				1F177AA523E1F0E0006F59D0 /* View+PartialSheetModifier.swift */,
+				01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */,
 			);
 			name = PartialSheet;
 			path = ../../Sources/PartialSheet;
@@ -160,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01CCB63C244AEE3900F7F67F /* View+IfDeviceType.swift in Sources */,
 				1F177A6E23E1ECC3006F59D0 /* AppDelegate.swift in Sources */,
 				1F177AA823E1F0E0006F59D0 /* View+PartialSheetModifier.swift in Sources */,
 				1DDC0E5923E3E6DB0033EC03 /* ContentView.swift in Sources */,
@@ -290,9 +296,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PartialSheetExample/PartialSheetExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PartialSheetExample/Preview Content\"";
-				DEVELOPMENT_TEAM = PFL87SH2M9;
+				DEVELOPMENT_TEAM = 23536XD8LD;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PartialSheetExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -301,6 +308,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = os.PartialSheetExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -310,9 +318,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PartialSheetExample/PartialSheetExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PartialSheetExample/Preview Content\"";
-				DEVELOPMENT_TEAM = PFL87SH2M9;
+				DEVELOPMENT_TEAM = 23536XD8LD;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PartialSheetExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -321,6 +330,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = os.PartialSheetExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
