@@ -2,7 +2,15 @@
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
 
+## iPhone Preview
+
 <img src="https://user-images.githubusercontent.com/11211914/68700576-6c100580-0585-11ea-847b-99f0450311a4.gif" width="250"><img src="https://user-images.githubusercontent.com/11211914/68700574-6c100580-0585-11ea-9727-8a02ec36b118.gif" width="250">
+
+## iPad Preview
+<img src="https://user-images.githubusercontent.com/11211914/79673521-af019380-821d-11ea-82f5-49d75e83d7c0.png" width="500">
+
+## Mac Preview
+<img src="https://user-images.githubusercontent.com/11211914/79673482-7eb9f500-821d-11ea-93e0-60fc32e554ee.png" width="600">
 
 
 ## Features
