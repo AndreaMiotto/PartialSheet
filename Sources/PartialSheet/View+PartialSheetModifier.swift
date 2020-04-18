@@ -34,7 +34,7 @@ extension View {
 				handlerBarColor: handlerBarColor,
 				enableCover: enableCover,
 				coverColor: coverColor,
-				view: view
+				sheetContent: view
 			)
 		)
 	}

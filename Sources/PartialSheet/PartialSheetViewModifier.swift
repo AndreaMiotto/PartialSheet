@@ -19,7 +19,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     /// The color of the background
     var backgroundColor: Color
     
-    /// The color of the Handlander Bar
+    /// The color of the Handlander Bar and the X button on ipad and mac
     var handlerBarColor: Color
     
     /// Tells if should be there a cover between the Partial Sheet and the Content
@@ -28,7 +28,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     /// The color of the cover
     var coverColor: Color
     
-    var view: () -> SheetContent
+    var sheetContent: () -> SheetContent
     
     // MARK: - Private Properties
     
@@ -71,45 +71,144 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     func body(content: Content) -> some View {
         ZStack {
             content
-                .background(
-                    GeometryReader { proxy -> AnyView in
-                        let rect = proxy.frame(in: .global)
-                        // This avoids an infinite layout loop
-                        if rect.integral != self.presenterContentRect.integral {
-                            DispatchQueue.main.async {
-                                self.presenterContentRect = rect
+                // if the device type is an iPhone
+                .iPhone {
+                    $0
+                        .background(
+                            GeometryReader { proxy -> AnyView in
+                                let rect = proxy.frame(in: .global)
+                                // This avoids an infinite layout loop
+                                if rect.integral != self.presenterContentRect.integral {
+                                    DispatchQueue.main.async {
+                                        self.presenterContentRect = rect
+                                    }
+                                }
+                                return AnyView(EmptyView())
                             }
-                        }
-                        return AnyView(EmptyView())
+                    )
+                        .padding(.bottom, self.offset)
+                        .onAppear{
+                            let notifier = NotificationCenter.default
+                            let willShow = UIResponder.keyboardWillShowNotification
+                            let willHide = UIResponder.keyboardWillHideNotification
+                            notifier.addObserver(forName: willShow,
+                                                 object: nil,
+                                                 queue: .main,
+                                                 using: self.keyboardShow)
+                            notifier.addObserver(forName: willHide,
+                                                 object: nil,
+                                                 queue: .main,
+                                                 using: self.keyboardHide)
                     }
-            )
-                .padding(.bottom, self.offset)
-                .onAppear{
-                    let notifier = NotificationCenter.default
-                    let willShow = UIResponder.keyboardWillShowNotification
-                    let willHide = UIResponder.keyboardWillHideNotification
-                    notifier.addObserver(forName: willShow,
-                                         object: nil,
-                                         queue: .main,
-                                         using: self.keyboardShow)
-                    notifier.addObserver(forName: willHide,
-                                         object: nil,
-                                         queue: .main,
-                                         using: self.keyboardHide)
+                    .onDisappear {
+                        let notifier = NotificationCenter.default
+                        notifier.removeObserver(self)
+                    }
             }
-            .onDisappear {
-                let notifier = NotificationCenter.default
-                notifier.removeObserver(self)
+                // if the device type is not an iPhone,
+                // display the sheet content as a normal sheet
+                .iPadAndMac {
+                    $0
+                        .sheet(isPresented: $presented) {
+                            self.iPandAndMacSheet()
+                    }
             }
-            sheet()
-                .edgesIgnoringSafeArea(.vertical)
+            // if the device type is an iPhone,
+            // display the sheet content as a draggableSheet
+            if deviceType == .iphone {
+                iPhoneSheet()
+                    .edgesIgnoringSafeArea(.vertical)
+            }
         }
     }
-    
-    /// This is the builder for the sheet content
-    func sheet()-> some View {
+
+     /// This is the builder for the sheet content for iPad and Mac devices only
+    private func iPandAndMacSheet() -> some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.presented = false
+                }, label: {
+                    Image(systemName: "xmark")
+                    .foregroundColor(handlerBarColor)
+                        .padding(.horizontal)
+                        .padding(.top)
+                })
+            }
+            self.sheetContent()
+            Spacer()
+        }
+    }
+
+    /// This is the builder for the sheet content for iPhone devices only
+    private func iPhoneSheet()-> some View {
         // Build the drag gesture
-        let drag = DragGesture()
+        let drag = dragGesture()
+        
+        return ZStack {
+
+            // Attach the COVER VIEW
+            if presented && enableCover {
+                Rectangle()
+                    .foregroundColor(coverColor)
+                    .edgesIgnoringSafeArea(.vertical)
+                    .onTapGesture {
+                        withAnimation {
+                            self.presented = false
+                            self.dismissKeyboard()
+                        }
+                }
+            }
+            // The SHEET VIEW
+            Group {
+                VStack(spacing: 0) {
+                    // This is the little rounded bar (HANDLER) on top of the sheet
+                    VStack {
+                        Spacer()
+                        RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
+                            .frame(width: 40, height: 5)
+                            .foregroundColor(self.handlerBarColor)
+                        Spacer()
+                    }
+                    .frame(height: handlerSectionHeight)
+                    VStack {
+                        // Attach the SHEET CONTENT
+                        self.sheetContent()
+                            .background(
+                                GeometryReader { proxy -> AnyView in
+                                    let rect = proxy.frame(in: .global)
+                                    // This avoids an infinite layout loop
+                                    if rect.integral != self.sheetContentRect.integral {
+                                        DispatchQueue.main.async {
+                                            self.sheetContentRect = rect
+                                        }
+                                    }
+                                    return AnyView(EmptyView())
+                                }
+                        )
+                    }
+                    Spacer()
+                }
+                .frame(width: UIScreen.main.bounds.width)
+                .background(backgroundColor)
+                .cornerRadius(10.0)
+                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
+                .offset(y: self.presented ?
+                    self.topAnchor + self.dragState.translation.height : self.bottomAnchor - self.dragState.translation.height
+                )
+                    .animation(self.dragState.isDragging ?
+                        nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                    .gesture(drag)
+            }
+        }
+    }
+
+    // MARK: - Drag Gesture & Handler
+
+    /// Create a new **DragGesture** with *updating* and *onEndend* func
+    private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
+        DragGesture()
             .updating($dragState) { drag, state, _ in
                 self.dismissKeyboard()
                 let yOffset = drag.translation.height
@@ -128,66 +227,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                 }
         }
         .onEnded(onDragEnded)
-        
-        return ZStack {
-            // Attach the cover view
-            if presented && enableCover {
-                Rectangle()
-                    .foregroundColor(coverColor)
-                    .edgesIgnoringSafeArea(.vertical)
-                    .onTapGesture {
-                        withAnimation {
-                            self.presented = false
-                            self.dismissKeyboard()
-                        }
-                }
-            }
-            // The Sheet View
-            Group {
-                VStack(spacing: 0) {
-                    // This is the little rounded bar (handler) on top of the sheet
-                    VStack {
-                        Spacer()
-                        RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
-                            .frame(width: 40, height: 5)
-                            .foregroundColor(self.handlerBarColor)
-                        Spacer()
-                    }
-                    .frame(height: handlerSectionHeight)
-                    VStack {
-                        // Attach the content of the sheet
-                        self.view()
-                            
-                        .background(
-                            GeometryReader { proxy -> AnyView in
-                                let rect = proxy.frame(in: .global)
-                                // This avoids an infinite layout loop
-                                if rect.integral != self.sheetContentRect.integral {
-                                    DispatchQueue.main.async {
-                                        self.sheetContentRect = rect
-                                    }
-                                }
-                                return AnyView(EmptyView())
-                            }
-                        )
-                    }
-                    Spacer()
-                }
-                .frame(width: UIScreen.main.bounds.width)
-                .background(backgroundColor)
-                .cornerRadius(10.0)
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                .offset(y: self.presented ?
-                    self.topAnchor + self.dragState.translation.height : self.bottomAnchor - self.dragState.translation.height
-                )
-                    .animation(self.dragState.isDragging ?
-                        nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
-                    .gesture(drag)
-            }
-        }
     }
-    
-    // MARK: - Private Methods
     
     /// The method called when the drag ends. It moves the sheet in the correct position based on the last drag gesture
     private func onDragEnded(drag: DragGesture.Value) {
