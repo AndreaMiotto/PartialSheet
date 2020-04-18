@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-enum DeviceType {
+internal enum DeviceType {
     case iphone
     case ipad
     case mac
 }
 
-var deviceType: DeviceType = {
+internal var deviceType: DeviceType = {
     #if targetEnvironment(macCatalyst)
     return .mac
     #else
@@ -26,7 +26,7 @@ var deviceType: DeviceType = {
     #endif
 }()
 
-extension View {
+internal extension View {
 
     @ViewBuilder func ifIs<T>(_ condition: Bool, transform: (Self) -> T) -> some View where T: View {
         if condition {

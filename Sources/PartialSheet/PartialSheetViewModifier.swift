@@ -19,7 +19,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     /// The color of the background
     var backgroundColor: Color
     
-    /// The color of the Handlander Bar
+    /// The color of the Handlander Bar and the X button on ipad and mac
     var handlerBarColor: Color
     
     /// Tells if should be there a cover between the Partial Sheet and the Content
@@ -28,7 +28,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     /// The color of the cover
     var coverColor: Color
     
-    var view: () -> SheetContent
+    var sheetContent: () -> SheetContent
     
     // MARK: - Private Properties
     
@@ -71,6 +71,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     func body(content: Content) -> some View {
         ZStack {
             content
+                // if the device type is an iPhone
                 .iPhone {
                     $0
                         .background(
@@ -104,51 +105,50 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         notifier.removeObserver(self)
                     }
             }
-
-            .iPadAndMac {
-                $0
-                    .sheet(isPresented: $presented) {
-                        VStack {
-                            self.view()
-                            Spacer()
-                        }
-                }
+                // if the device type is not an iPhone,
+                // display the sheet content as a normal sheet
+                .iPadAndMac {
+                    $0
+                        .sheet(isPresented: $presented) {
+                            self.iPandAndMacSheet()
+                    }
             }
-
+            // if the device type is an iPhone,
+            // display the sheet content as a draggableSheet
             if deviceType == .iphone {
-                sheet()
+                iPhoneSheet()
                     .edgesIgnoringSafeArea(.vertical)
             }
-
-
         }
     }
-    
-    /// This is the builder for the sheet content
-    func sheet()-> some View {
-        // Build the drag gesture
-        let drag = DragGesture()
-            .updating($dragState) { drag, state, _ in
-                self.dismissKeyboard()
-                let yOffset = drag.translation.height
-                let threshold = CGFloat(-50)
-                let stiffness = CGFloat(0.3)
-                if yOffset > threshold {
-                    state = .dragging(translation: drag.translation)
-                } else if
-                    // if above threshold and belove ScreenHeight make it elastic
-                    -yOffset + self.sheetContentRect.height <
-                        UIScreen.main.bounds.height + self.handlerSectionHeight
-                {
-                    let distance = yOffset - threshold
-                    let translationHeight = threshold + (distance * stiffness)
-                    state = .dragging(translation: CGSize(width: drag.translation.width, height: translationHeight))
-                }
+
+     /// This is the builder for the sheet content for iPad and Mac devices only
+    private func iPandAndMacSheet() -> some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.presented = false
+                }, label: {
+                    Image(systemName: "xmark")
+                    .foregroundColor(handlerBarColor)
+                        .padding(.horizontal)
+                        .padding(.top)
+                })
+            }
+            self.sheetContent()
+            Spacer()
         }
-        .onEnded(onDragEnded)
+    }
+
+    /// This is the builder for the sheet content for iPhone devices only
+    private func iPhoneSheet()-> some View {
+        // Build the drag gesture
+        let drag = dragGesture()
         
         return ZStack {
-            // Attach the cover view
+
+            // Attach the COVER VIEW
             if presented && enableCover {
                 Rectangle()
                     .foregroundColor(coverColor)
@@ -160,10 +160,10 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         }
                 }
             }
-            // The Sheet View
+            // The SHEET VIEW
             Group {
                 VStack(spacing: 0) {
-                    // This is the little rounded bar (handler) on top of the sheet
+                    // This is the little rounded bar (HANDLER) on top of the sheet
                     VStack {
                         Spacer()
                         RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
@@ -173,9 +173,8 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                     }
                     .frame(height: handlerSectionHeight)
                     VStack {
-                        // Attach the content of the sheet
-                        self.view()
-                            
+                        // Attach the SHEET CONTENT
+                        self.sheetContent()
                             .background(
                                 GeometryReader { proxy -> AnyView in
                                     let rect = proxy.frame(in: .global)
@@ -204,8 +203,31 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
             }
         }
     }
-    
-    // MARK: - Private Methods
+
+    // MARK: - Drag Gesture & Handler
+
+    /// Create a new **DragGesture** with *updating* and *onEndend* func
+    private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
+        DragGesture()
+            .updating($dragState) { drag, state, _ in
+                self.dismissKeyboard()
+                let yOffset = drag.translation.height
+                let threshold = CGFloat(-50)
+                let stiffness = CGFloat(0.3)
+                if yOffset > threshold {
+                    state = .dragging(translation: drag.translation)
+                } else if
+                    // if above threshold and belove ScreenHeight make it elastic
+                    -yOffset + self.sheetContentRect.height <
+                        UIScreen.main.bounds.height + self.handlerSectionHeight
+                {
+                    let distance = yOffset - threshold
+                    let translationHeight = threshold + (distance * stiffness)
+                    state = .dragging(translation: CGSize(width: drag.translation.width, height: translationHeight))
+                }
+        }
+        .onEnded(onDragEnded)
+    }
     
     /// The method called when the drag ends. It moves the sheet in the correct position based on the last drag gesture
     private func onDragEnded(drag: DragGesture.Value) {
