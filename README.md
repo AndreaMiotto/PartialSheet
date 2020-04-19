@@ -123,8 +123,12 @@ struct SheetView: View {
                     .font(.headline)
 
                 TextField("TextField", text: self.$text)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-
+                    .padding(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color(UIColor.systemGray2), lineWidth: 1)
+                    )
+                    
                 Toggle(isOn: self.$longer) {
                     Text("Advanced")
                 }

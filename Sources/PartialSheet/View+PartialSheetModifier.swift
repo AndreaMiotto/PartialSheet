@@ -22,8 +22,8 @@ extension View {
 	*/
 	public func partialSheet<SheetContent: View>(
 		presented: Binding<Bool>,
-		backgroundColor: Color = Color.white,
-		handlerBarColor: Color = Color.gray,
+        backgroundColor: Color = Color(UIColor.tertiarySystemBackground),
+        handlerBarColor: Color = Color(UIColor.systemGray2),
 		enableCover: Bool = true,
 		coverColor: Color = Color.black.opacity(0.4),
 		view: @escaping () -> SheetContent ) -> some View {
