@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 /// This is the modifier for the Partial Sheet
 struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
@@ -15,20 +16,15 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     
     /// Tells if the sheet should be presented or not
     @Binding var presented: Bool
-    
-    /// The color of the background
-    var backgroundColor: Color
-    
-    /// The color of the Handlander Bar and the X button on ipad and mac
-    var handlerBarColor: Color
-    
-    /// Tells if should be there a cover between the Partial Sheet and the Content
-    var enableCover: Bool
-    
-    /// The color of the cover
-    var coverColor: Color
-    
+
+    /// The Partial Sheet Style configuration
+    var style: PartialSheetStyle
+
+    /// The content of the sheet
     var sheetContent: () -> SheetContent
+
+    /// Void func that will be called on dismiss
+    var onDismiss: (() -> Void)?
     
     // MARK: - Private Properties
     
@@ -108,10 +104,12 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                 // if the device type is not an iPhone,
                 // display the sheet content as a normal sheet
                 .iPadAndMac {
-                    $0
-                        .sheet(isPresented: $presented) {
-                            self.iPandAndMacSheet()
-                    }
+                        $0
+                            .sheet(isPresented: $presented, onDismiss: {
+                                self.onDismiss?()
+                            }, content: {
+                                self.iPandAndMacSheet()
+                            })
             }
             // if the device type is an iPhone,
             // display the sheet content as a draggableSheet
@@ -131,7 +129,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                     self.presented = false
                 }, label: {
                     Image(systemName: "xmark")
-                    .foregroundColor(handlerBarColor)
+                        .foregroundColor(style.handlerBarColor)
                         .padding(.horizontal)
                         .padding(.top)
                 })
@@ -149,14 +147,15 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         return ZStack {
 
             // Attach the COVER VIEW
-            if presented && enableCover {
+            if presented && style.enableCover {
                 Rectangle()
-                    .foregroundColor(coverColor)
+                    .foregroundColor(style.coverColor)
                     .edgesIgnoringSafeArea(.vertical)
                     .onTapGesture {
                         withAnimation {
                             self.presented = false
                             self.dismissKeyboard()
+                            self.onDismiss?()
                         }
                 }
             }
@@ -168,7 +167,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         Spacer()
                         RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
                             .frame(width: 40, height: 5)
-                            .foregroundColor(self.handlerBarColor)
+                            .foregroundColor(self.style.handlerBarColor)
                         Spacer()
                     }
                     .frame(height: handlerSectionHeight)
@@ -191,7 +190,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                     Spacer()
                 }
                 .frame(width: UIScreen.main.bounds.width)
-                .background(backgroundColor)
+                .background(style.backgroundColor)
                 .cornerRadius(10.0)
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
                 .offset(y: self.presented ?
@@ -249,11 +248,15 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         if verticalDirection > 1 {
             DispatchQueue.main.async {
                 self.presented = false
+                self.onDismiss?()
             }
         } else if verticalDirection < 0 {
             self.presented = true
         } else {
             self.presented = (closestPosition == topAnchor)
+            if !presented {
+                onDismiss?()
+            }
         }
     }
     

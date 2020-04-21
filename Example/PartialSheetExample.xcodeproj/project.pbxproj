@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01294541244ED5E5006190B0 /* PartialSheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01294540244ED5E5006190B0 /* PartialSheetStyle.swift */; };
 		01CCB63C244AEE3900F7F67F /* View+IfDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */; };
 		1DDC0E5923E3E6DB0033EC03 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDC0E5823E3E6DB0033EC03 /* ContentView.swift */; };
 		1F177A6E23E1ECC3006F59D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F177A6D23E1ECC3006F59D0 /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01294540244ED5E5006190B0 /* PartialSheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialSheetStyle.swift; sourceTree = "<group>"; };
 		01CCB63A244AEC6100F7F67F /* PartialSheetExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PartialSheetExample.entitlements; sourceTree = "<group>"; };
 		01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+IfDeviceType.swift"; sourceTree = "<group>"; };
 		1DDC0E5823E3E6DB0033EC03 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = PartialSheetExample/ContentView.swift; sourceTree = SOURCE_ROOT; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				1F177AA323E1F0E0006F59D0 /* PartialSheetViewModifier.swift */,
+				01294540244ED5E5006190B0 /* PartialSheetStyle.swift */,
 				1F177AA423E1F0E0006F59D0 /* DragState.swift */,
 				1F177AA523E1F0E0006F59D0 /* View+PartialSheetModifier.swift */,
 				01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */,
@@ -166,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01CCB63C244AEE3900F7F67F /* View+IfDeviceType.swift in Sources */,
+				01294541244ED5E5006190B0 /* PartialSheetStyle.swift in Sources */,
 				1F177A6E23E1ECC3006F59D0 /* AppDelegate.swift in Sources */,
 				1F177AA823E1F0E0006F59D0 /* View+PartialSheetModifier.swift in Sources */,
 				1DDC0E5923E3E6DB0033EC03 /* ContentView.swift in Sources */,

@@ -43,7 +43,9 @@ struct ContentView: View {
             .navigationBarTitle("Partial Sheet")
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .partialSheet(presented: $modalPresented) {
+        .partialSheet(presented: $modalPresented, onDismiss: {
+            print("dismissed")
+        }) {
             SheetView()
         }
     }
