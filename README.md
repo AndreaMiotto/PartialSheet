@@ -52,10 +52,8 @@ To use the **Partial Sheet** just attach the new modifier:
 YourView
 .partialSheet(
     presented: Binding<Bool>, 
-    backgroundColor: Color = Color.white, 
-    handlerBarColor: Color = Color.gray, 
-    enableCover: Bool = true, 
-    coverColor: Color = Color.black.opacity(0.4), 
+    style: PartialSheetStyle = PartialSheetStyle.default()
+    onDismiss: (() -> Void)? = nil, 
     view: @escaping () -> SheetContent) -> some View where SheetContent : View
 ```
 
@@ -100,7 +98,9 @@ struct ContentView: View {
             .navigationBarTitle("Partial Sheet")
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .partialSheet(presented: $modalPresented) {
+        .partialSheet(presented: $modalPresented, onDismiss: {
+            print("dismissed")
+        }) {
             SheetView()
         }
     }
