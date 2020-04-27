@@ -247,8 +247,10 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         // Set the correct anchor point based on the vertical direction of the drag
         if verticalDirection > 1 {
             DispatchQueue.main.async {
-                self.presented = false
-                self.onDismiss?()
+                withAnimation {
+                    self.presented = false
+                    self.onDismiss?()
+                }
             }
         } else if verticalDirection < 0 {
             self.presented = true
