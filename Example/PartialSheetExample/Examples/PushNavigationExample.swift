@@ -32,6 +32,7 @@ struct PushNavigationExample: View {
                 Text("Show Partial Sheet")
             }
         }
+        .navigationBarTitle(Text("Push Navigation"))
     }
 }
 
