@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var modalPresented: Bool = false
+
+    @EnvironmentObject var partialSheet : PartialSheetManager
 
     var body: some View {
         NavigationView {
@@ -25,29 +26,38 @@ struct ContentView: View {
 
                 On iPad and Mac devices it will present a normal .sheet view.
                 """)
+                    .padding()
                 Spacer()
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        self.modalPresented = true
-                    }, label: {
-                        Text("Display the Partial Shehet")
+
+                Text("Examples").font(.headline)
+                    .padding()
+
+                List {
+
+                    NavigationLink(
+                        destination: NormalExample(),
+                        label: {Text("Normal Example")
+
                     })
-                        .padding()
-                    Spacer()
+                    NavigationLink(
+                        destination: TextfieldExample(),
+                        label: {
+                            Text("Textfield Example")
+
+                    })
+                    NavigationLink(
+                        destination: ListExample(),
+                        label: {Text("List Example")
+
+                    })
                 }
                 Spacer()
                 Spacer()
             }
-            .padding()
             .navigationBarTitle("Partial Sheet")
         }
+        .addPartialSheet()
         .navigationViewStyle(StackNavigationViewStyle())
-        .partialSheet(presented: $modalPresented, onDismiss: {
-            print("dismissed")
-        }) {
-            SheetView()
-        }
     }
 }
 
@@ -58,36 +68,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct SheetView: View {
-    @State private var longer: Bool = false
-    @State private var text: String = "some text"
-
-
-    var body: some View {
-        VStack {
-            Group {
-                Text("Settings Panel")
-                    .font(.headline)
-
-                TextField("TextField", text: self.$text)
-                    .padding(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(UIColor.systemGray2), lineWidth: 1)
-                )
-
-                Toggle(isOn: self.$longer) {
-                    Text("Advanced")
-                }
-            }
-            .padding()
-            .frame(height: 50)
-            if self.longer {
-                VStack {
-                    Text("More settings here...")
-                }
-                .frame(height: 200)
-            }
-        }
-    }
-}

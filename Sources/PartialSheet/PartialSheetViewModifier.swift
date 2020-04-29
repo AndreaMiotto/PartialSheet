@@ -10,24 +10,17 @@ import SwiftUI
 import Combine
 
 /// This is the modifier for the Partial Sheet
-struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
+struct PartialSheet: ViewModifier {
     
     // MARK: - Public Properties
-    
-    /// Tells if the sheet should be presented or not
-    @Binding var presented: Bool
 
     /// The Partial Sheet Style configuration
     var style: PartialSheetStyle
-
-    /// The content of the sheet
-    var sheetContent: () -> SheetContent
-
-    /// Void func that will be called on dismiss
-    var onDismiss: (() -> Void)?
     
     // MARK: - Private Properties
-    
+
+    @EnvironmentObject private var manager: PartialSheetManager
+
     /// The rect containing the content
     @State private var presenterContentRect: CGRect = .zero
     
@@ -49,7 +42,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
     
     /// The current anchor point, based if the **presented** property is true or false
     private var currentAnchorPoint: CGFloat {
-        return presented ?
+        return manager.isPresented ?
             topAnchor :
         bottomAnchor
     }
@@ -105,8 +98,8 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                 // display the sheet content as a normal sheet
                 .iPadAndMac {
                         $0
-                            .sheet(isPresented: $presented, onDismiss: {
-                                self.onDismiss?()
+                            .sheet(isPresented: $manager.isPresented, onDismiss: {
+                                self.manager.onDismiss?()
                             }, content: {
                                 self.iPandAndMacSheet()
                             })
@@ -126,7 +119,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    self.presented = false
+                    self.manager.isPresented = false
                 }, label: {
                     Image(systemName: "xmark")
                         .foregroundColor(style.handlerBarColor)
@@ -134,7 +127,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                         .padding(.top)
                 })
             }
-            self.sheetContent()
+            self.manager.content
             Spacer()
         }
     }
@@ -147,15 +140,15 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         return ZStack {
 
             // Attach the COVER VIEW
-            if presented && style.enableCover {
+            if manager.isPresented && style.enableCover {
                 Rectangle()
                     .foregroundColor(style.coverColor)
                     .edgesIgnoringSafeArea(.vertical)
                     .onTapGesture {
                         withAnimation {
-                            self.presented = false
+                            self.manager.isPresented = false
                             self.dismissKeyboard()
-                            self.onDismiss?()
+                            self.manager.onDismiss?()
                         }
                 }
             }
@@ -173,7 +166,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                     .frame(height: handlerSectionHeight)
                     VStack {
                         // Attach the SHEET CONTENT
-                        self.sheetContent()
+                        self.manager.content
                             .background(
                                 GeometryReader { proxy -> AnyView in
                                     let rect = proxy.frame(in: .global)
@@ -193,7 +186,7 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
                 .background(style.backgroundColor)
                 .cornerRadius(10.0)
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                .offset(y: self.presented ?
+                .offset(y: self.manager.isPresented ?
                     self.topAnchor + self.dragState.translation.height : self.bottomAnchor - self.dragState.translation.height
                 )
                     .animation(self.dragState.isDragging ?
@@ -247,15 +240,15 @@ struct PartialSheet<SheetContent>: ViewModifier where SheetContent: View {
         // Set the correct anchor point based on the vertical direction of the drag
         if verticalDirection > 1 {
             DispatchQueue.main.async {
-                self.presented = false
-                self.onDismiss?()
+                self.manager.isPresented = false
+                self.manager.onDismiss?()
             }
         } else if verticalDirection < 0 {
-            self.presented = true
+            self.manager.isPresented = true
         } else {
-            self.presented = (closestPosition == topAnchor)
-            if !presented {
-                onDismiss?()
+            self.manager.isPresented = (closestPosition == topAnchor)
+            if !manager.isPresented {
+                manager.onDismiss?()
             }
         }
     }
