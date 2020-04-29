@@ -175,6 +175,6 @@ struct ContentView_Previews: PreviewProvider {
 
 ```
 
-In the **Example** directory you can find more examples with more complext structures.
+In the **Example** directory you can find more examples with more complex structures.
 
 
