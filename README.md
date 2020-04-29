@@ -1,3 +1,5 @@
+**Version 2.0 has been released, there are a lot of breaking changes, make sure to read the guide before update!**
+
 # PartialSheet
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
