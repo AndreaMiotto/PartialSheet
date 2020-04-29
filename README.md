@@ -52,7 +52,7 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 The new version brings a lot of breaking changes and a lot of improvments:
 - The Partial Sheet can now be called from any view in the *navigation stack*
 - The Partial Sheet can now be called from any item inside a *List*
-- The Partial Sheet is now handles as en *environment object* making easy to display and close it.
+- The Partial Sheet is now handled as an *environment object* making easy to display and close it.
 
 ## Installation
 
