@@ -37,6 +37,8 @@ struct TextfieldExample_Previews: PreviewProvider {
         NavigationView {
             TextfieldExample()
         }
+        .addPartialSheet()
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

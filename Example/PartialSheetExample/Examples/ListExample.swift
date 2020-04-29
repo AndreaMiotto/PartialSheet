@@ -32,5 +32,7 @@ struct ListExample_Previews: PreviewProvider {
         NavigationView {
             ListExample()
         }
+        .addPartialSheet()
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }

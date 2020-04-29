@@ -37,6 +37,8 @@ struct NormalExample_Previews: PreviewProvider {
         NavigationView {
             NormalExample()
         }
+        .addPartialSheet()
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
