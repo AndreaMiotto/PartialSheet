@@ -46,65 +46,110 @@ You can do that under the **Preferences** panel of your Xcode, in the **Accounts
 
 ##  How to Use
 
-To use the **Partial Sheet** just attach the new modifier:
+To use the **Partial Sheet** you need to follow just three simple steps
+
+1. Add a **Partial Sheet Manager** istance as an *environment object* to your Root View in you *SceneDelegate*
+```Swift
+// 1.1 Create the manager
+let sheetManager: PartialSheetManager = PartialSheetManager()
+let contentView = ContentView()
+    // 1.2 Add the manager as environmentObject
+    .environmentObject(sheetManager)
+
+//Common SwiftUI code to add the rootView in your rootViewController
+if let windowScene = scene as? UIWindowScene {
+    let window = UIWindow(windowScene: windowScene)
+    window.rootViewController = UIHostingController(
+        rootView: contentView
+    )
+    self.window = window
+    window.makeKeyAndVisible()
+}
+```
+2. Add the **Partial View** to your *Root View*, and if you want give it a style. In your RootView file at the end of the builder add the following modifier:
 
 ```Swift
-YourView
-.partialSheet(
-    presented: Binding<Bool>, 
-    style: PartialSheetStyle = PartialSheetStyle.default()
-    onDismiss: (() -> Void)? = nil, 
-    view: @escaping () -> SheetContent) -> some View where SheetContent : View
+struct ContentView: View {
+
+    var body: some View {
+       ...
+       .addPartialSheet(style: <PartialSheetStyle>)
+    }
+}
 ```
 
-If you want a starting point copy in your ContentView file the following code:
+3. In anyone of your views add a reference to the *environment object* and than just call the `showPartialSheet<T>(_ onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> T) where T: View` func whenever you want like this:
+
+```Swift
+@EnvironmentObject var partialSheetManager: PartialSheetManager
+
+...
+
+Button(action: {
+    self.partialSheetManager.showPartialSheet({
+        print("Partial sheet dismissed")
+    }) {
+         Text("This is a Partial Sheet")
+    }
+}, label: {
+    Text("Show sheet")
+})
+```
+
+If you want a starting point copy in your SceneDelegate and in your ContentView files the following code:
+
+1. SceneDelegate:
+
+```Swift
+func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    let sheetManager: PartialSheetManager = PartialSheetManager()
+    let contentView = ContentView()
+        .environmentObject(sheetManager)
+    if let windowScene = scene as? UIWindowScene {
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = UIHostingController(
+            rootView: contentView
+        )
+        self.window = window
+        window.makeKeyAndVisible()
+    }
+}
+```
+
+Remember to always add `import PartialSheet` in every file you want to use the PartialSheet.
+
+1. ContentView:
 
 ```Swift
 import SwiftUI
 import PartialSheet
 
 struct ContentView: View {
-    @State private var modalPresented: Bool = false
+
+    @EnvironmentObject var partialSheet : PartialSheetManager
 
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
-                HStack {
-                    Spacer()
-                }
-                Text("""
-                Hi, this is the Partial Sheet modifier.
-
-                On iPhone devices it allows you to dispaly a totally custom sheet with a relative height based on his content.
-                In this way the sheet will cover the screen only for the space it will need.
-
-                On iPad and Mac devices it will present a normal .sheet view.
-                """)
+            VStack(alignment: .center) {
                 Spacer()
-                HStack {
-                    Spacer()
                     Button(action: {
-                        self.modalPresented = true
+                        self.partialSheet.showPartialSheet({
+                            print("dismissed")
+                        }) {
+                            Text("Partial Sheet")
+                        }
                     }, label: {
-                        Text("Display the Partial Shehet")
+                        Text("Show Partial Sheet")
                     })
-                        .padding()
-                    Spacer()
-                }
-                Spacer()
                 Spacer()
             }
-            .padding()
             .navigationBarTitle("Partial Sheet")
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .partialSheet(presented: $modalPresented, onDismiss: {
-            print("dismissed")
-        }) {
-            SheetView()
-        }
+        .addPartialSheet()
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -112,38 +157,8 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct SheetView: View {
-    @State private var longer: Bool = false
-    @State private var text: String = "some text"
-
-    var body: some View {
-        VStack {
-            Group {
-                Text("Settings Panel")
-                    .font(.headline)
-
-                TextField("TextField", text: self.$text)
-                    .padding(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color(UIColor.systemGray2), lineWidth: 1)
-                    )
-                    
-                Toggle(isOn: self.$longer) {
-                    Text("Advanced")
-                }
-            }
-            .padding()
-            .frame(height: 50)
-            if self.longer {
-                VStack {
-                    Text("More settings here...")
-                }
-                .frame(height: 200)
-            }
-        }
-    }
-}
 ```
+
+In the **Example** directory you can find more examples with more complext structures.
 
 
