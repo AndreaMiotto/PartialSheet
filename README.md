@@ -1,3 +1,13 @@
+<p align="center">
+  <img width="150" src="https://user-images.githubusercontent.com/11211914/80565360-98381980-8a33-11ea-8a66-e551eb0030a1.png">
+</p>
+<p align="center">
+     <img src="https://img.shields.io/github/license/AndreaMiotto/PartialSheet">
+    <img src="https://img.shields.io/github/v/release/andreamiotto/PartialSheet">
+    <img src="https://img.shields.io/github/stars/andreamiotto/PartialSheet">
+    <img src="https://img.shields.io/github/last-commit/AndreaMiotto/PartialSheet">
+</p>
+
 # PartialSheet
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
