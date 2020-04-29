@@ -64,7 +64,7 @@ You can do that under the **Preferences** panel of your Xcode, in the **Accounts
 
 To use the **Partial Sheet** you need to follow just three simple steps
 
-1. Add a **Partial Sheet Manager** istance as an *environment object* to your Root View in you *SceneDelegate*
+1. Add a **Partial Sheet Manager** instance as an *environment object* to your Root View in you *SceneDelegate*
 ```Swift
 // 1.1 Create the manager
 let sheetManager: PartialSheetManager = PartialSheetManager()
