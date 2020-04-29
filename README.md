@@ -1,8 +1,16 @@
-**Version 2.0 has been released, there are a lot of breaking changes, make sure to read the guide before update!**
-
 # PartialSheet
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
+
+**Version 2.0 has been released, there are a lot of breaking changes, make sure to read the guide before update!**
+
+
+## Index
+
+- [Features](#features)
+- [Version 2](#version-2)
+- [Installation](#installation)
+- [How To Use](#how-to-use)
 
 ## iPhone Preview
 
@@ -29,6 +37,12 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 
 #### Nice to have
 - \[ ] ScrcrollView and List compatibility: as soon as Apple adds some API to handle better ScrollViews
+
+## Version 2
+The new version brings a lot of breaking changes and a lot of improvments:
+- The Partial Sheet can now be called from any view in the *navigation stack*
+- The Partial Sheet can now be called from any item inside a *List*
+- The Partial Sheet is now handles as en *environment object* making easy to display and close it.
 
 ## Installation
 
