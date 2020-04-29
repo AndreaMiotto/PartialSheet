@@ -64,15 +64,8 @@ struct PartialSheet: ViewModifier {
                 .iPhone {
                     $0
                         .background(
-                            GeometryReader { proxy -> AnyView in
-                                let rect = proxy.frame(in: .global)
-                                // This avoids an infinite layout loop
-                                if rect.integral != self.presenterContentRect.integral {
-                                    DispatchQueue.main.async {
-                                        self.presenterContentRect = rect
-                                    }
-                                }
-                                return AnyView(EmptyView())
+                            GeometryReader { proxy in
+                                Color.clear.preference(key: PresenterContentPreferenceKey.self, value: [ContentPrefData(bounds: proxy.frame(in: .global))])
                             }
                     )
                         .padding(.bottom, self.offset)
@@ -93,6 +86,9 @@ struct PartialSheet: ViewModifier {
                         let notifier = NotificationCenter.default
                         notifier.removeObserver(self)
                     }
+                    .onPreferenceChange(PresenterContentPreferenceKey.self, perform: { (prefData) in
+                        self.presenterContentRect = prefData.first?.bounds ?? .zero
+                    })
             }
                 // if the device type is not an iPhone,
                 // display the sheet content as a normal sheet
@@ -101,7 +97,7 @@ struct PartialSheet: ViewModifier {
                             .sheet(isPresented: $manager.isPresented, onDismiss: {
                                 self.manager.onDismiss?()
                             }, content: {
-                                self.iPandAndMacSheet()
+                                self.iPadAndMacSheet()
                             })
             }
             // if the device type is an iPhone,
@@ -114,7 +110,7 @@ struct PartialSheet: ViewModifier {
     }
 
      /// This is the builder for the sheet content for iPad and Mac devices only
-    private func iPandAndMacSheet() -> some View {
+    private func iPadAndMacSheet() -> some View {
         VStack {
             HStack {
                 Spacer()
@@ -168,20 +164,16 @@ struct PartialSheet: ViewModifier {
                         // Attach the SHEET CONTENT
                         self.manager.content
                             .background(
-                                GeometryReader { proxy -> AnyView in
-                                    let rect = proxy.frame(in: .global)
-                                    // This avoids an infinite layout loop
-                                    if rect.integral != self.sheetContentRect.integral {
-                                        DispatchQueue.main.async {
-                                            self.sheetContentRect = rect
-                                        }
-                                    }
-                                    return AnyView(EmptyView())
+                                GeometryReader { proxy in
+                                    Color.clear.preference(key: ContentPreferenceKey.self, value: [ContentPrefData(bounds: proxy.frame(in: .global))])
                                 }
                         )
                     }
                     Spacer()
                 }
+                .onPreferenceChange(ContentPreferenceKey.self, perform: { (prefData) in
+                    self.sheetContentRect = prefData.first?.bounds ?? .zero
+                })
                 .frame(width: UIScreen.main.bounds.width)
                 .background(style.backgroundColor)
                 .cornerRadius(10.0)
@@ -277,5 +269,23 @@ struct PartialSheet: ViewModifier {
     private func dismissKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
         UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+    }
+    
+    struct PresenterContentPreferenceKey: PreferenceKey {
+        static func reduce(value: inout [PartialSheet.ContentPrefData], nextValue: () -> [PartialSheet.ContentPrefData]) {
+            value.append(contentsOf: nextValue())
+        }
+        static var defaultValue: [ContentPrefData] = []
+    }
+    
+    struct ContentPreferenceKey: PreferenceKey {
+        static func reduce(value: inout [PartialSheet.ContentPrefData], nextValue: () -> [PartialSheet.ContentPrefData]) {
+            value.append(contentsOf: nextValue())
+        }
+        static var defaultValue: [ContentPrefData] = []
+    }
+    
+    struct ContentPrefData: Equatable {
+        let bounds: CGRect
     }
 }
