@@ -142,9 +142,7 @@ func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options conn
 }
 ```
 
-Remember to always add `import PartialSheet` in every file you want to use the PartialSheet.
-
-1. ContentView:
+2. ContentView:
 
 ```Swift
 import SwiftUI
@@ -184,6 +182,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 ```
+Remember to always add `import PartialSheet` in every file you want to use the PartialSheet.
 
 In the **Example** directory you can find more examples with more complex structures.
 
