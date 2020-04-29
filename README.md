@@ -1,3 +1,13 @@
+<p align="center">
+  <img width="150" src="https://user-images.githubusercontent.com/11211914/80565360-98381980-8a33-11ea-8a66-e551eb0030a1.png">
+</p>
+<p align="center">
+     <img src="https://img.shields.io/github/license/AndreaMiotto/PartialSheet">
+    <img src="https://img.shields.io/github/v/release/andreamiotto/PartialSheet">
+    <img src="https://img.shields.io/github/stars/andreamiotto/PartialSheet">
+    <img src="https://img.shields.io/github/last-commit/AndreaMiotto/PartialSheet">
+</p>
+
 # PartialSheet
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.
@@ -64,7 +74,7 @@ You can do that under the **Preferences** panel of your Xcode, in the **Accounts
 
 To use the **Partial Sheet** you need to follow just three simple steps
 
-1. Add a **Partial Sheet Manager** istance as an *environment object* to your Root View in you *SceneDelegate*
+1. Add a **Partial Sheet Manager** instance as an *environment object* to your Root View in you *SceneDelegate*
 ```Swift
 // 1.1 Create the manager
 let sheetManager: PartialSheetManager = PartialSheetManager()
@@ -132,9 +142,7 @@ func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options conn
 }
 ```
 
-Remember to always add `import PartialSheet` in every file you want to use the PartialSheet.
-
-1. ContentView:
+2. ContentView:
 
 ```Swift
 import SwiftUI
@@ -174,6 +182,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 ```
+Remember to always add `import PartialSheet` in every file you want to use the PartialSheet.
 
 In the **Example** directory you can find more examples with more complex structures.
 
