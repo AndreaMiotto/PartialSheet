@@ -147,10 +147,18 @@ extension PartialSheet {
         
         return ZStack {
 
-            // Attach the COVER VIEW
-            if manager.isPresented && style.enableCover {
-                Rectangle()
-                    .foregroundColor(style.coverColor)
+            //MARK: - iPhone Cover View
+
+            if manager.isPresented {
+                Group {
+                    if style.enableCover {
+                        Rectangle()
+                        .foregroundColor(style.coverColor)
+                    }
+                    if style.blurEffectStyle != nil {
+                        BlurEffectView(style: style.blurEffectStyle ?? UIBlurEffect.Style.systemChromeMaterial)
+                    }
+                }
                     .edgesIgnoringSafeArea(.vertical)
                     .onTapGesture {
                         withAnimation {

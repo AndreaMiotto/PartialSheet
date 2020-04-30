@@ -10,6 +10,7 @@
 		01294541244ED5E5006190B0 /* PartialSheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01294540244ED5E5006190B0 /* PartialSheetStyle.swift */; };
 		01477D8B2458E928007AE720 /* PartialSheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01477D8A2458E928007AE720 /* PartialSheetManager.swift */; };
 		0174F417245962B80053C454 /* PushNavigationExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0174F416245962B80053C454 /* PushNavigationExample.swift */; };
+		0174F419245A569C0053C454 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0174F418245A569C0053C454 /* BlurEffectView.swift */; };
 		01A013942458E4A900D0F5DD /* NormalExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A013932458E4A900D0F5DD /* NormalExample.swift */; };
 		01A013962458E4C000D0F5DD /* TextfieldExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A013952458E4C000D0F5DD /* TextfieldExample.swift */; };
 		01A013992458E4D800D0F5DD /* ListExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A013982458E4D800D0F5DD /* ListExample.swift */; };
@@ -28,6 +29,7 @@
 		01294540244ED5E5006190B0 /* PartialSheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialSheetStyle.swift; sourceTree = "<group>"; };
 		01477D8A2458E928007AE720 /* PartialSheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialSheetManager.swift; sourceTree = "<group>"; };
 		0174F416245962B80053C454 /* PushNavigationExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNavigationExample.swift; sourceTree = "<group>"; };
+		0174F418245A569C0053C454 /* BlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffectView.swift; sourceTree = "<group>"; };
 		01A013932458E4A900D0F5DD /* NormalExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalExample.swift; sourceTree = "<group>"; };
 		01A013952458E4C000D0F5DD /* TextfieldExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextfieldExample.swift; sourceTree = "<group>"; };
 		01A013982458E4D800D0F5DD /* ListExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListExample.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				1F177AA423E1F0E0006F59D0 /* DragState.swift */,
 				1F177AA523E1F0E0006F59D0 /* View+PartialSheetModifier.swift */,
 				01CCB63B244AEE3900F7F67F /* View+IfDeviceType.swift */,
+				0174F418245A569C0053C454 /* BlurEffectView.swift */,
 			);
 			name = PartialSheet;
 			path = ../../Sources/PartialSheet;
@@ -200,6 +203,7 @@
 				01477D8B2458E928007AE720 /* PartialSheetManager.swift in Sources */,
 				1F177AA823E1F0E0006F59D0 /* View+PartialSheetModifier.swift in Sources */,
 				1DDC0E5923E3E6DB0033EC03 /* ContentView.swift in Sources */,
+				0174F419245A569C0053C454 /* BlurEffectView.swift in Sources */,
 				1F177AA723E1F0E0006F59D0 /* DragState.swift in Sources */,
 				1F177AA623E1F0E0006F59D0 /* PartialSheetViewModifier.swift in Sources */,
 				01A013992458E4D800D0F5DD /* ListExample.swift in Sources */,
