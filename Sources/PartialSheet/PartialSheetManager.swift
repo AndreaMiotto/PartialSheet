@@ -23,7 +23,7 @@ import SwiftUI
  */
 public class PartialSheetManager: ObservableObject {
 
-    /// Publshed var to present or hide the partial sheet
+    /// Published var to present or hide the partial sheet
     @Published var isPresented: Bool = false
     /// The content of the sheet
     private(set) var content: AnyView
@@ -37,7 +37,7 @@ public class PartialSheetManager: ObservableObject {
     /**
       Presents a **Partial Sheet**  with a dynamic height based on his content.
      - parameter content: The content to place inside of the Partial Sheet.
-     - parameter onDismiss: This code will be runned when the sheet in dismissed.
+     - parameter onDismiss: This code will be runned when the sheet is dismissed.
      */
     public func showPartialSheet<T>(_ onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> T) where T: View {
         self.content = AnyView(content())

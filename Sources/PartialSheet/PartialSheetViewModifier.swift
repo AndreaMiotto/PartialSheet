@@ -21,10 +21,10 @@ struct PartialSheet: ViewModifier {
 
     @EnvironmentObject private var manager: PartialSheetManager
 
-    /// The rect containing the content
+    /// The rect containing the presenter
     @State private var presenterContentRect: CGRect = .zero
     
-    /// The rect containing the content
+    /// The rect containing the sheet content
     @State private var sheetContentRect: CGRect = .zero
     
     /// The offset for keyboard height
@@ -64,15 +64,12 @@ struct PartialSheet: ViewModifier {
                 .iPhone {
                     $0
                         .background(
-                            GeometryReader { proxy -> AnyView in
-                                let rect = proxy.frame(in: .global)
-                                // This avoids an infinite layout loop
-                                if rect.integral != self.presenterContentRect.integral {
-                                    DispatchQueue.main.async {
-                                        self.presenterContentRect = rect
-                                    }
-                                }
-                                return AnyView(EmptyView())
+                            GeometryReader { proxy in
+                                // Add a tracking on the presenter frame
+                                Color.clear.preference(
+                                    key: PresenterPreferenceKey.self,
+                                    value: [PreferenceData(bounds: proxy.frame(in: .global))]
+                                )
                             }
                     )
                         .padding(.bottom, self.offset)
@@ -93,15 +90,18 @@ struct PartialSheet: ViewModifier {
                         let notifier = NotificationCenter.default
                         notifier.removeObserver(self)
                     }
+                    .onPreferenceChange(PresenterPreferenceKey.self, perform: { (prefData) in
+                        self.presenterContentRect = prefData.first?.bounds ?? .zero
+                    })
             }
                 // if the device type is not an iPhone,
                 // display the sheet content as a normal sheet
-                .iPadAndMac {
+                .iPadOrMac {
                         $0
                             .sheet(isPresented: $manager.isPresented, onDismiss: {
                                 self.manager.onDismiss?()
                             }, content: {
-                                self.iPandAndMacSheet()
+                                self.iPadAndMacSheet()
                             })
             }
             // if the device type is an iPhone,
@@ -112,9 +112,15 @@ struct PartialSheet: ViewModifier {
             }
         }
     }
+}
+
+//MARK: - Platfomr Specific Sheet Builders
+extension PartialSheet {
+
+    //MARK: - Mac and iPad Sheet Builder
 
      /// This is the builder for the sheet content for iPad and Mac devices only
-    private func iPandAndMacSheet() -> some View {
+    private func iPadAndMacSheet() -> some View {
         VStack {
             HStack {
                 Spacer()
@@ -131,6 +137,8 @@ struct PartialSheet: ViewModifier {
             Spacer()
         }
     }
+
+    //MARK: - iPhone Sheet Builder
 
     /// This is the builder for the sheet content for iPhone devices only
     private func iPhoneSheet()-> some View {
@@ -168,20 +176,16 @@ struct PartialSheet: ViewModifier {
                         // Attach the SHEET CONTENT
                         self.manager.content
                             .background(
-                                GeometryReader { proxy -> AnyView in
-                                    let rect = proxy.frame(in: .global)
-                                    // This avoids an infinite layout loop
-                                    if rect.integral != self.sheetContentRect.integral {
-                                        DispatchQueue.main.async {
-                                            self.sheetContentRect = rect
-                                        }
-                                    }
-                                    return AnyView(EmptyView())
+                                GeometryReader { proxy in
+                                    Color.clear.preference(key: SheetPreferenceKey.self, value: [PreferenceData(bounds: proxy.frame(in: .global))])
                                 }
                         )
                     }
                     Spacer()
                 }
+                .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
+                    self.sheetContentRect = prefData.first?.bounds ?? .zero
+                })
                 .frame(width: UIScreen.main.bounds.width)
                 .background(style.backgroundColor)
                 .cornerRadius(10.0)
@@ -195,8 +199,10 @@ struct PartialSheet: ViewModifier {
             }
         }
     }
+}
 
-    // MARK: - Drag Gesture & Handler
+// MARK: - Drag Gesture & Handler
+extension PartialSheet {
 
     /// Create a new **DragGesture** with *updating* and *onEndend* func
     private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
@@ -252,10 +258,11 @@ struct PartialSheet: ViewModifier {
             }
         }
     }
-    
-    
-    // MARK: - Keyboard Handlers Methods
-    
+}
+
+// MARK: - Keyboard Handlers Methods
+extension PartialSheet {
+
     /// Add the keyboard offset
     private func keyboardShow(notification: Notification) {
         let endFrame = UIResponder.keyboardFrameEndUserInfoKey
@@ -265,17 +272,43 @@ struct PartialSheet: ViewModifier {
             self.offset = height - (bottomInset ?? 0)
         }
     }
-    
+
     /// Remove the keyboard offset
     private func keyboardHide(notification: Notification) {
         DispatchQueue.main.async {
             self.offset = 0
         }
     }
-    
+
     /// Dismiss the keyboard
     private func dismissKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
         UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
     }
+}
+
+// MARK: - PreferenceKeys Handlers
+extension PartialSheet {
+
+    /// Preference Key for the Sheet Presener
+    struct PresenterPreferenceKey: PreferenceKey {
+        static func reduce(value: inout [PartialSheet.PreferenceData], nextValue: () -> [PartialSheet.PreferenceData]) {
+            value.append(contentsOf: nextValue())
+        }
+        static var defaultValue: [PreferenceData] = []
+    }
+
+    /// Preference Key for the Sheet Content
+    struct SheetPreferenceKey: PreferenceKey {
+        static func reduce(value: inout [PartialSheet.PreferenceData], nextValue: () -> [PartialSheet.PreferenceData]) {
+            value.append(contentsOf: nextValue())
+        }
+        static var defaultValue: [PreferenceData] = []
+    }
+
+    /// Data Stored in the Preferences
+    struct PreferenceData: Equatable {
+        let bounds: CGRect
+    }
+
 }

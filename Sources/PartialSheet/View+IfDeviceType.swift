@@ -60,7 +60,7 @@ internal extension View {
         }
     }
 
-    @ViewBuilder func iPadAndMac<T>(_ transform: (Self) -> T) -> some View where T: View {
+    @ViewBuilder func iPadOrMac<T>(_ transform: (Self) -> T) -> some View where T: View {
         if deviceType == .mac || deviceType == .ipad {
             transform(self)
         } else {
