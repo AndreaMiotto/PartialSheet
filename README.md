@@ -21,6 +21,8 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 - [Version 2](#version-2)
 - [Installation](#installation)
 - [How To Use](#how-to-use)
+- [Wiki - Full Guide](https://github.com/AndreaMiotto/PartialSheet/wiki)
+
 
 ## iPhone Preview
 
@@ -71,6 +73,8 @@ If you can't find anything in the panel of the Swift Packages you probably haven
 You can do that under the **Preferences** panel of your Xcode, in the **Accounts** section.
 
 ##  How to Use
+
+*You can read more on the [wiki - full guide](https://github.com/AndreaMiotto/PartialSheet/wiki).*
 
 To use the **Partial Sheet** you need to follow just three simple steps
 
