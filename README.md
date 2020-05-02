@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="150" src="https://user-images.githubusercontent.com/11211914/80565360-98381980-8a33-11ea-8a66-e551eb0030a1.png">
+  <img width="150" src="https://user-images.githubusercontent.com/11211914/80854827-92824400-8c7e-11ea-898f-7232aaaf69ed.png">
 </p>
 <p align="center">
      <img src="https://img.shields.io/github/license/AndreaMiotto/PartialSheet">
