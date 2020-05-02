@@ -43,5 +43,6 @@ struct PushNavigationExample_Previews: PreviewProvider {
         }
         .addPartialSheet()
         .navigationViewStyle(StackNavigationViewStyle())
+        .environmentObject(PartialSheetManager())
     }
 }

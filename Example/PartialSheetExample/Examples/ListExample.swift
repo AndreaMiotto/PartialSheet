@@ -34,5 +34,6 @@ struct ListExample_Previews: PreviewProvider {
         }
         .addPartialSheet()
         .navigationViewStyle(StackNavigationViewStyle())
+        .environmentObject(PartialSheetManager())
     }
 }

@@ -10,8 +10,6 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @EnvironmentObject var partialSheet : PartialSheetManager
-
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
@@ -70,6 +68,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+        .environmentObject(PartialSheetManager())
     }
 }
 
