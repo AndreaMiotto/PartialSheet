@@ -24,7 +24,16 @@ import SwiftUI
 public class PartialSheetManager: ObservableObject {
 
     /// Published var to present or hide the partial sheet
-    @Published var isPresented: Bool = false
+    @Published var isPresented: Bool = false {
+        didSet {
+            if !isPresented {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
+                    self?.content = AnyView(EmptyView())
+                    self?.onDismiss = nil
+                }
+            }
+        }
+    }
     /// The content of the sheet
     private(set) var content: AnyView
     /// the onDismiss code runned when the partial sheet is closed
