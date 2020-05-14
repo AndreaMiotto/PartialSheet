@@ -21,18 +21,21 @@ struct PartialSheet: ViewModifier {
 
     @EnvironmentObject private var manager: PartialSheetManager
 
-    /// The rect containing the presenter
-    @State private var presenterContentRect: CGRect = .zero
     
     /// The rect containing the sheet content
     @State private var sheetContentRect: CGRect = .zero
     
     /// The offset for keyboard height
     @State private var offset: CGFloat = 0
+
+    /// The screen height minus the safe area bottom insets
+    private var screenHeight: CGFloat {
+        return UIScreen.main.bounds.height - (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0)
+    }
     
     /// The point for the top anchor
     private var topAnchor: CGFloat {
-        return max(presenterContentRect.height - sheetContentRect.height - handlerSectionHeight, 110)
+        return max(screenHeight - sheetContentRect.height - handlerSectionHeight, 110)
     }
     
     /// The he point for the bottom anchor
@@ -90,9 +93,9 @@ struct PartialSheet: ViewModifier {
                         let notifier = NotificationCenter.default
                         notifier.removeObserver(self)
                     }
-                    .onPreferenceChange(PresenterPreferenceKey.self, perform: { (prefData) in
-                        self.presenterContentRect = prefData.first?.bounds ?? .zero
-                    })
+//                    .onPreferenceChange(PresenterPreferenceKey.self, perform: { (prefData) in
+//                        self.presenterContentRect = prefData.first?.bounds ?? .zero
+//                    })
             }
                 // if the device type is not an iPhone,
                 // display the sheet content as a normal sheet
