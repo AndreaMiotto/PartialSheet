@@ -21,21 +21,22 @@ struct PartialSheet: ViewModifier {
 
     @EnvironmentObject private var manager: PartialSheetManager
 
+    /// The rect containing the presenter
+    @State private var presenterContentRect: CGRect = .zero
+
     
     /// The rect containing the sheet content
     @State private var sheetContentRect: CGRect = .zero
     
     /// The offset for keyboard height
     @State private var offset: CGFloat = 0
-
-    /// The screen height minus the safe area bottom insets
-    private var screenHeight: CGFloat {
-        return UIScreen.main.bounds.height - (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0)
-    }
     
     /// The point for the top anchor
     private var topAnchor: CGFloat {
-        return max(screenHeight - sheetContentRect.height - handlerSectionHeight, 110)
+        return max(presenterContentRect.height +
+            (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0) -
+            sheetContentRect.height - handlerSectionHeight,
+                   110)
     }
     
     /// The he point for the bottom anchor
@@ -93,19 +94,19 @@ struct PartialSheet: ViewModifier {
                         let notifier = NotificationCenter.default
                         notifier.removeObserver(self)
                     }
-//                    .onPreferenceChange(PresenterPreferenceKey.self, perform: { (prefData) in
-//                        self.presenterContentRect = prefData.first?.bounds ?? .zero
-//                    })
+                    .onPreferenceChange(PresenterPreferenceKey.self, perform: { (prefData) in
+                        self.presenterContentRect = prefData.first?.bounds ?? .zero
+                    })
             }
                 // if the device type is not an iPhone,
                 // display the sheet content as a normal sheet
                 .iPadOrMac {
-                        $0
-                            .sheet(isPresented: $manager.isPresented, onDismiss: {
-                                self.manager.onDismiss?()
-                            }, content: {
-                                self.iPadAndMacSheet()
-                            })
+                    $0
+                        .sheet(isPresented: $manager.isPresented, onDismiss: {
+                            self.manager.onDismiss?()
+                        }, content: {
+                            self.iPadAndMacSheet()
+                        })
             }
             // if the device type is an iPhone,
             // display the sheet content as a draggableSheet
@@ -122,7 +123,7 @@ extension PartialSheet {
 
     //MARK: - Mac and iPad Sheet Builder
 
-     /// This is the builder for the sheet content for iPad and Mac devices only
+    /// This is the builder for the sheet content for iPad and Mac devices only
     private func iPadAndMacSheet() -> some View {
         VStack {
             HStack {
@@ -156,19 +157,19 @@ extension PartialSheet {
                 Group {
                     if style.enableCover {
                         Rectangle()
-                        .foregroundColor(style.coverColor)
+                            .foregroundColor(style.coverColor)
                     }
                     if style.blurEffectStyle != nil {
                         BlurEffectView(style: style.blurEffectStyle ?? UIBlurEffect.Style.systemChromeMaterial)
                     }
                 }
-                    .edgesIgnoringSafeArea(.vertical)
-                    .onTapGesture {
-                        withAnimation {
-                            self.manager.isPresented = false
-                            self.dismissKeyboard()
-                            self.manager.onDismiss?()
-                        }
+                .edgesIgnoringSafeArea(.vertical)
+                .onTapGesture {
+                    withAnimation {
+                        self.manager.isPresented = false
+                        self.dismissKeyboard()
+                        self.manager.onDismiss?()
+                    }
                 }
             }
             // The SHEET VIEW
@@ -197,12 +198,12 @@ extension PartialSheet {
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
                     self.sheetContentRect = prefData.first?.bounds ?? .zero
                 })
-                .frame(width: UIScreen.main.bounds.width)
-                .background(style.backgroundColor)
-                .cornerRadius(10.0)
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                .offset(y: self.manager.isPresented ?
-                    self.topAnchor + self.dragState.translation.height : self.bottomAnchor - self.dragState.translation.height
+                    .frame(width: UIScreen.main.bounds.width)
+                    .background(style.backgroundColor)
+                    .cornerRadius(10.0)
+                    .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
+                    .offset(y: self.manager.isPresented ?
+                        self.topAnchor + self.dragState.translation.height : self.bottomAnchor - self.dragState.translation.height
                 )
                     .animation(self.dragState.isDragging ?
                         nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
@@ -290,7 +291,7 @@ extension PartialSheet {
             self.offset = 0
         }
     }
-
+    
     /// Dismiss the keyboard
     private func dismissKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
