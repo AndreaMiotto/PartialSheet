@@ -57,5 +57,6 @@ public class PartialSheetManager: ObservableObject {
     /// Close the Partial Sheet and run the onDismiss function if it has been previously specified
     public func closePartialSheet() {
         self.isPresented = false
+        self.onDismiss?()
     }
 }
