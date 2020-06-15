@@ -76,7 +76,6 @@ struct PartialSheet: ViewModifier {
                                 )
                             }
                     )
-                        .padding(.bottom, self.offset)
                         .onAppear{
                             let notifier = NotificationCenter.default
                             let willShow = UIResponder.keyboardWillShowNotification
@@ -204,7 +203,7 @@ extension PartialSheet {
                     .cornerRadius(10.0)
                     .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
                     .offset(y: self.manager.isPresented ?
-                        self.topAnchor + self.dragState.translation.height : self.bottomAnchor - self.dragState.translation.height
+                        self.topAnchor + self.dragState.translation.height - self.offset : self.bottomAnchor - self.dragState.translation.height
                 )
                     .animation(self.dragState.isDragging ?
                         nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
