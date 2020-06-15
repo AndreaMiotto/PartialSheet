@@ -192,6 +192,7 @@ extension PartialSheet {
                                     Color.clear.preference(key: SheetPreferenceKey.self, value: [PreferenceData(bounds: proxy.frame(in: .global))])
                                 }
                         )
+                        .animation(nil)
                     }
                     Spacer()
                 }
