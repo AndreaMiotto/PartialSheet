@@ -200,7 +200,7 @@ extension PartialSheet {
                 })
                     .frame(width: UIScreen.main.bounds.width)
                     .background(style.backgroundColor)
-                    .cornerRadius(10.0)
+                    .cornerRadius(style.cornerRadius)
                     .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
                     .offset(y: self.manager.isPresented ?
                         self.topAnchor + self.dragState.translation.height - self.offset : self.bottomAnchor - self.dragState.translation.height
