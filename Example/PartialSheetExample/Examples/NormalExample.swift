@@ -22,7 +22,7 @@ struct NormalExample: View {
                      SheetView()
                 }
             }, label: {
-                Text("Display the Partial Shehet")
+                Text("Display the Partial Sheet")
             })
                 .padding()
             Spacer()
