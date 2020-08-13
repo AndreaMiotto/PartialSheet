@@ -25,6 +25,9 @@ public struct PartialSheetStyle {
     /// The blur effect style to applied between the partialSheet and the Presenter Conter
     var blurEffectStyle: UIBlurEffect.Style?
 
+    /// The corner radius of Sheet
+    var cornerRadius: CGFloat
+
     /**
      The **Style** for the PartialSheet
      - parameter backgroundColor: The background color of the partial sheet
@@ -40,13 +43,15 @@ public struct PartialSheetStyle {
         handlerBarColor: Color,
         enableCover: Bool,
         coverColor: Color,
-        blurEffectStyle: UIBlurEffect.Style?
+        blurEffectStyle: UIBlurEffect.Style?,
+        cornerRadius: CGFloat
     ) {
         self.backgroundColor = backgroundColor
         self.handlerBarColor = handlerBarColor
         self.enableCover = enableCover
         self.coverColor = coverColor
         self.blurEffectStyle = blurEffectStyle
+        self.cornerRadius = cornerRadius
     }
 }
 
@@ -65,7 +70,8 @@ extension PartialSheetStyle {
                                  handlerBarColor: Color(UIColor.systemGray2),
                                  enableCover: true,
                                  coverColor: Color.black.opacity(0.4),
-                                 blurEffectStyle: nil
+                                 blurEffectStyle: nil,
+                                 cornerRadius: 10
         )
     }
 }
