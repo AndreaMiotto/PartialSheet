@@ -295,7 +295,9 @@ extension PartialSheet {
     /// Dismiss the keyboard
     private func dismissKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
-        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+		DispatchQueue.main.async {
+			UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+		}
     }
 }
 
