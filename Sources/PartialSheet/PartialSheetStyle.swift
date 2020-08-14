@@ -8,10 +8,17 @@
 
 import SwiftUI
 
+
 public struct PartialSheetStyle {
 
-    /// The color of the background
-    var backgroundColor: Color
+    /// Background enum
+    public enum PartialSheetBackground {
+        case solid(Color)
+        case blur(UIBlurEffect.Style)
+    }
+    
+    /// The background of the sheet
+    var background: PartialSheetBackground
 
     /// The color of the Handlander Bar and the X button on ipad and mac
     var handlerBarColor: Color
@@ -39,14 +46,14 @@ public struct PartialSheetStyle {
      Use `PartialSheetStyle.defaultStyle` if you want a quicker init for the style with default values.
      */
     public init(
-        backgroundColor: Color,
+        background: PartialSheetBackground,
         handlerBarColor: Color,
         enableCover: Bool,
         coverColor: Color,
         blurEffectStyle: UIBlurEffect.Style?,
         cornerRadius: CGFloat
     ) {
-        self.backgroundColor = backgroundColor
+        self.background = background
         self.handlerBarColor = handlerBarColor
         self.enableCover = enableCover
         self.coverColor = coverColor
@@ -59,14 +66,14 @@ extension PartialSheetStyle {
 
     /** A default Style for the PartialSheet with system colors.
 
-     - backgroundColor: Color(UIColor.tertiarySystemBackground)
+     - background: .solid(Color(UIColor.tertiarySystemBackground))
      - handlerBarColor: Color(UIColor.systemGray2)
      - enableCover: true
      - coverColor: Color.black.opacity(0.4)
      - blurEffectStyle: nil
      */
     public static func defaultStyle() -> PartialSheetStyle {
-        return PartialSheetStyle(backgroundColor: Color(UIColor.tertiarySystemBackground),
+        return PartialSheetStyle(background: .solid(Color(UIColor.tertiarySystemBackground)),
                                  handlerBarColor: Color(UIColor.systemGray2),
                                  enableCover: true,
                                  coverColor: Color.black.opacity(0.4),

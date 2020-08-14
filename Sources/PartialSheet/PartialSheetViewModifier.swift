@@ -58,6 +58,18 @@ struct PartialSheet: ViewModifier {
     
     /// The Gesture State for the drag gesture
     @GestureState private var dragState = DragState.inactive
+
+    /// Background of sheet
+    private var background: some View {
+        Group {
+            switch self.style.background {
+            case .solid(let color):
+                color
+            case .blur(let effect):
+                BlurEffectView(style: effect).background(Color.clear)
+            }
+        }
+    }
     
     // MARK: - Content Builders
     
@@ -138,7 +150,7 @@ extension PartialSheet {
             }
             self.manager.content
             Spacer()
-        }
+        }.background(self.background)
     }
 
     //MARK: - iPhone Sheet Builder
@@ -198,16 +210,16 @@ extension PartialSheet {
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
                     self.sheetContentRect = prefData.first?.bounds ?? .zero
                 })
-                    .frame(width: UIScreen.main.bounds.width)
-                    .background(style.backgroundColor)
-                    .cornerRadius(style.cornerRadius)
-                    .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                    .offset(y: self.manager.isPresented ?
-                        self.topAnchor + self.dragState.translation.height - self.offset : self.bottomAnchor - self.dragState.translation.height
+                .frame(width: UIScreen.main.bounds.width)
+                .background(self.background)
+                .cornerRadius(style.cornerRadius)
+                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
+                .offset(y: self.manager.isPresented ?
+                            self.topAnchor + self.dragState.translation.height - self.offset : self.bottomAnchor - self.dragState.translation.height
                 )
-                    .animation(self.dragState.isDragging ?
-                        nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
-                    .gesture(drag)
+                .animation(self.dragState.isDragging ?
+                            nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                .gesture(drag)
             }
         }
     }
