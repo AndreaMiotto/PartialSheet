@@ -59,10 +59,10 @@ struct PartialSheet: ViewModifier {
     /// Calculates the sheets y position
     private var sheetPosition: CGFloat {
         if self.manager.isPresented {
-            let topInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0.0
+            let topInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20.0 // 20.0 = To make sure we dont go under statusbar on screens without safe area inset
             let position = self.topAnchor + self.dragState.translation.height - self.offset
             if position < topInset {
-                return 20
+                return topInset
             }
             
             return position
