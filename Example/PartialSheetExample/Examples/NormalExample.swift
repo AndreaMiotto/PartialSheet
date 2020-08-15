@@ -44,35 +44,15 @@ struct NormalExample_Previews: PreviewProvider {
 }
 
 struct SheetView: View {
-    @State private var longer: Bool = false
-    @State private var text: String = "some text"
-
 
     var body: some View {
         VStack {
             Group {
-                Text("Settings Panel")
-                    .font(.headline)
-
-                TextField("TextField", text: self.$text)
-                    .padding(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(UIColor.systemGray2), lineWidth: 1)
-                )
-
-                Toggle(isOn: self.$longer) {
-                    Text("Advanced")
-                }
+                Text("Settings Panel").font(.headline)
+                Text("This is a partial sheet - Hello World").font(.subheadline)
             }
             .padding()
             .frame(height: 50)
-            if self.longer {
-                VStack {
-                    Text("More settings here...")
-                }
-                .frame(height: 200)
-            }
         }
     }
 }

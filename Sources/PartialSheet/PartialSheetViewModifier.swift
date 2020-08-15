@@ -13,17 +13,16 @@ import Combine
 struct PartialSheet: ViewModifier {
     
     // MARK: - Public Properties
-
+    
     /// The Partial Sheet Style configuration
     var style: PartialSheetStyle
     
     // MARK: - Private Properties
-
+    
     @EnvironmentObject private var manager: PartialSheetManager
-
+    
     /// The rect containing the presenter
     @State private var presenterContentRect: CGRect = .zero
-
     
     /// The rect containing the sheet content
     @State private var sheetContentRect: CGRect = .zero
@@ -134,9 +133,9 @@ struct PartialSheet: ViewModifier {
 
 //MARK: - Platfomr Specific Sheet Builders
 extension PartialSheet {
-
+    
     //MARK: - Mac and iPad Sheet Builder
-
+    
     /// This is the builder for the sheet content for iPad and Mac devices only
     private func iPadAndMacSheet() -> some View {
         VStack {
@@ -155,18 +154,18 @@ extension PartialSheet {
             Spacer()
         }
     }
-
+    
     //MARK: - iPhone Sheet Builder
-
+    
     /// This is the builder for the sheet content for iPhone devices only
     private func iPhoneSheet()-> some View {
         // Build the drag gesture
         let drag = dragGesture()
         
         return ZStack {
-
+            
             //MARK: - iPhone Cover View
-
+            
             if manager.isPresented {
                 Group {
                     if style.enableCover {
@@ -179,7 +178,7 @@ extension PartialSheet {
                 }
                 .edgesIgnoringSafeArea(.vertical)
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
                         self.manager.isPresented = false
                         self.dismissKeyboard()
                         self.manager.onDismiss?()
@@ -206,21 +205,20 @@ extension PartialSheet {
                                     Color.clear.preference(key: SheetPreferenceKey.self, value: [PreferenceData(bounds: proxy.frame(in: .global))])
                                 }
                         )
-                        .animation(nil)
                     }
                     Spacer()
                 }
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
-                    self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                        self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    }
                 })
-                .frame(width: UIScreen.main.bounds.width)
-                .background(style.backgroundColor)
-                .cornerRadius(style.cornerRadius)
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                .offset(y: self.sheetPosition)
-                .animation(self.dragState.isDragging ?
-                            nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
-                .gesture(drag)
+                    .frame(width: UIScreen.main.bounds.width)
+                    .background(style.backgroundColor)
+                    .cornerRadius(style.cornerRadius)
+                    .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
+                    .offset(y: self.sheetPosition)
+                    .gesture(drag)
             }
         }
     }
@@ -228,7 +226,7 @@ extension PartialSheet {
 
 // MARK: - Drag Gesture & Handler
 extension PartialSheet {
-
+    
     /// Create a new **DragGesture** with *updating* and *onEndend* func
     private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
         DragGesture()
@@ -287,21 +285,25 @@ extension PartialSheet {
 
 // MARK: - Keyboard Handlers Methods
 extension PartialSheet {
-
+    
     /// Add the keyboard offset
     private func keyboardShow(notification: Notification) {
         let endFrame = UIResponder.keyboardFrameEndUserInfoKey
         if let rect: CGRect = notification.userInfo![endFrame] as? CGRect {
             let height = rect.height
             let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
-            self.offset = height - (bottomInset ?? 0)
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                self.offset = height - (bottomInset ?? 0)
+            }
         }
     }
-
+    
     /// Remove the keyboard offset
     private func keyboardHide(notification: Notification) {
         DispatchQueue.main.async {
-            self.offset = 0
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                self.offset = 0
+            }
         }
     }
     
@@ -316,7 +318,7 @@ extension PartialSheet {
 
 // MARK: - PreferenceKeys Handlers
 extension PartialSheet {
-
+    
     /// Preference Key for the Sheet Presener
     struct PresenterPreferenceKey: PreferenceKey {
         static func reduce(value: inout [PartialSheet.PreferenceData], nextValue: () -> [PartialSheet.PreferenceData]) {
@@ -324,7 +326,7 @@ extension PartialSheet {
         }
         static var defaultValue: [PreferenceData] = []
     }
-
+    
     /// Preference Key for the Sheet Content
     struct SheetPreferenceKey: PreferenceKey {
         static func reduce(value: inout [PartialSheet.PreferenceData], nextValue: () -> [PartialSheet.PreferenceData]) {
@@ -332,10 +334,10 @@ extension PartialSheet {
         }
         static var defaultValue: [PreferenceData] = []
     }
-
+    
     /// Data Stored in the Preferences
     struct PreferenceData: Equatable {
         let bounds: CGRect
     }
-
+    
 }
