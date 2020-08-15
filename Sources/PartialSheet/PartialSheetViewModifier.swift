@@ -60,14 +60,12 @@ struct PartialSheet: ViewModifier {
     @GestureState private var dragState = DragState.inactive
 
     /// Background of sheet
-    private var background: some View {
-        Group {
-            switch self.style.background {
-            case .solid(let color):
-                color
-            case .blur(let effect):
-                BlurEffectView(style: effect).background(Color.clear)
-            }
+    private func backgroundView() -> AnyView {
+        switch self.style.background {
+        case .solid(let color):
+            return AnyView(color)
+        case .blur(let effect):
+            return AnyView(BlurEffectView(style: effect).background(Color.clear))
         }
     }
     
@@ -150,7 +148,7 @@ extension PartialSheet {
             }
             self.manager.content
             Spacer()
-        }.background(self.background)
+        }.background(self.backgroundView())
     }
 
     //MARK: - iPhone Sheet Builder
@@ -211,7 +209,7 @@ extension PartialSheet {
                     self.sheetContentRect = prefData.first?.bounds ?? .zero
                 })
                 .frame(width: UIScreen.main.bounds.width)
-                .background(self.background)
+                .background(self.backgroundView())
                 .cornerRadius(style.cornerRadius)
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
                 .offset(y: self.manager.isPresented ?
