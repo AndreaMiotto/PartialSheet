@@ -34,32 +34,6 @@ public struct PartialSheetStyle {
 
     /// The corner radius of Sheet
     var cornerRadius: CGFloat
-
-    /**
-     The **Style** for the PartialSheet
-     - parameter backgroundColor: The background color of the partial sheet
-     - parameter handlerBarColor: The color of the handler bar to close the partial sheet
-     - parameter enableCover: True if you want a cover enabled between the sheet and the presenter view.
-     - parameter coverColor: The color of the cover,  use the .opacity modifier if you want a transparent effect
-     - parameter blurEffectStyle: If you want a blur effect on the cover, set the effect style, otherwise put it to nil.
-
-     Use `PartialSheetStyle.defaultStyle` if you want a quicker init for the style with default values.
-     */
-    public init(
-        background: PartialSheetBackground,
-        handlerBarColor: Color,
-        enableCover: Bool,
-        coverColor: Color,
-        blurEffectStyle: UIBlurEffect.Style?,
-        cornerRadius: CGFloat
-    ) {
-        self.background = background
-        self.handlerBarColor = handlerBarColor
-        self.enableCover = enableCover
-        self.coverColor = coverColor
-        self.blurEffectStyle = blurEffectStyle
-        self.cornerRadius = cornerRadius
-    }
 }
 
 extension PartialSheetStyle {
