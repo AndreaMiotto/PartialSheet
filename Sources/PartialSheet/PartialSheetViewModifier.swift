@@ -231,7 +231,7 @@ extension PartialSheet {
 
     /// Create a new **DragGesture** with *updating* and *onEndend* func
     private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
-        DragGesture()
+        DragGesture(minimumDistance: 30, coordinateSpace: .local)
             .updating($dragState) { drag, state, _ in
                 self.dismissKeyboard()
                 let yOffset = drag.translation.height
