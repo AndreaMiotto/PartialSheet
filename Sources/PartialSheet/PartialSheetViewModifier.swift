@@ -56,6 +56,21 @@ struct PartialSheet: ViewModifier {
         return 30
     }
     
+    /// Calculates the sheets y position
+    private var sheetPosition: CGFloat {
+        if self.manager.isPresented {
+            let topInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20.0 // 20.0 = To make sure we dont go under statusbar on screens without safe area inset
+            let position = self.topAnchor + self.dragState.translation.height - self.offset
+            if position < topInset {
+                return topInset
+            }
+            
+            return position
+        } else {
+            return self.bottomAnchor - self.dragState.translation.height
+        }
+    }
+    
     /// The Gesture State for the drag gesture
     @GestureState private var dragState = DragState.inactive
 
@@ -211,12 +226,10 @@ extension PartialSheet {
                     self.sheetContentRect = prefData.first?.bounds ?? .zero
                 })
                 .frame(width: UIScreen.main.bounds.width)
-                .background(self.background)
                 .cornerRadius(style.cornerRadius)
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                .offset(y: self.manager.isPresented ?
-                            self.topAnchor + self.dragState.translation.height - self.offset : self.bottomAnchor - self.dragState.translation.height
-                )
+                .background(self.background)
+                .offset(y: self.sheetPosition)
                 .animation(self.dragState.isDragging ?
                             nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
                 .gesture(drag)
@@ -307,9 +320,9 @@ extension PartialSheet {
     /// Dismiss the keyboard
     private func dismissKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
-		DispatchQueue.main.async {
-			UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
-		}
+        DispatchQueue.main.async {
+            UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+        }
     }
 }
 
