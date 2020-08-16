@@ -72,6 +72,16 @@ struct PartialSheet: ViewModifier {
     
     /// The Gesture State for the drag gesture
     @GestureState private var dragState = DragState.inactive
+
+    /// Background of sheet
+    private var background: AnyView {
+        switch self.style.background {
+        case .solid(let color):
+            return AnyView(color)
+        case .blur(let effect):
+            return AnyView(BlurEffectView(style: effect).background(Color.clear))
+        }
+    }
     
     // MARK: - Content Builders
     
@@ -152,7 +162,7 @@ extension PartialSheet {
             }
             self.manager.content
             Spacer()
-        }
+        }.background(self.background)
     }
     
     //MARK: - iPhone Sheet Builder
@@ -213,12 +223,12 @@ extension PartialSheet {
                         self.sheetContentRect = prefData.first?.bounds ?? .zero
                     }
                 })
-                    .frame(width: UIScreen.main.bounds.width)
-                    .background(style.backgroundColor)
-                    .cornerRadius(style.cornerRadius)
-                    .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                    .offset(y: self.sheetPosition)
-                    .gesture(drag)
+                .frame(width: UIScreen.main.bounds.width)
+                .background(self.background)
+                .cornerRadius(style.cornerRadius)
+                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
+                .offset(y: self.sheetPosition)
+                .gesture(drag)
             }
         }
     }
@@ -229,7 +239,7 @@ extension PartialSheet {
     
     /// Create a new **DragGesture** with *updating* and *onEndend* func
     private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
-        DragGesture()
+        DragGesture(minimumDistance: 30, coordinateSpace: .local)
             .updating($dragState) { drag, state, _ in
                 self.dismissKeyboard()
                 let yOffset = drag.translation.height
