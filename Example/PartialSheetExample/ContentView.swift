@@ -56,12 +56,14 @@ struct ContentView: View {
                     NavigationLink(
                         destination: DatePickerExample(),
                         label: {Text("DatePicker Example")
-                            
                     })
                     NavigationLink(
                         destination: PickerExample(),
                         label: {Text("Picker Example")
-                            
+                    })
+                    NavigationLink(
+                        destination: BlurredExample(),
+                        label: {Text("Blurred Example")
                     })
                 }
                 Spacer()
