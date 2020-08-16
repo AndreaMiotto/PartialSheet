@@ -53,6 +53,11 @@ struct ContentView: View {
                         label: {Text("Push Navigation Example")
 
                     })
+                    NavigationLink(
+                        destination: BlurredExample(),
+                        label: {Text("Blurred Example")
+                            
+                        })
                 }
                 Spacer()
                 Spacer()
