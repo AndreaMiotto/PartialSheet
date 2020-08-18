@@ -34,6 +34,20 @@ public struct PartialSheetStyle {
 
     /// The corner radius of Sheet
     var cornerRadius: CGFloat
+    
+    public init(background: PartialSheetBackground,
+                handlerBarColor: Color,
+                enableCover: Bool,
+                coverColor: Color,
+                blurEffectStyle: UIBlurEffect.Style? = nil,
+                cornerRadius: CGFloat
+    ) {
+        self.background = background
+        self.handlerBarColor = handlerBarColor
+        self.enableCover = enableCover
+        self.coverColor = coverColor
+        self.cornerRadius = cornerRadius
+    }
 }
 
 extension PartialSheetStyle {
