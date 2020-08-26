@@ -35,6 +35,15 @@ public struct PartialSheetStyle {
     /// The corner radius of Sheet
     var cornerRadius: CGFloat
     
+    /// Inits the style
+    ///
+    /// - Parameters:
+    ///   - background: The background to use
+    ///   - handlerBarColor: The handlebar color
+    ///   - enableCover: If the background cover is shown (behind the sheet)
+    ///   - coverColor: The background cover color
+    ///   - blurEffectStyle: A blur effect style to use on the background covor (behind the sheet)
+    ///   - cornerRadius: The corner radius for the sheet
     public init(background: PartialSheetBackground,
                 handlerBarColor: Color,
                 enableCover: Bool,

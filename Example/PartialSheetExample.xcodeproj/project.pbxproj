@@ -347,7 +347,7 @@
 				CODE_SIGN_ENTITLEMENTS = PartialSheetExample/PartialSheetExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PartialSheetExample/Preview Content\"";
-				DEVELOPMENT_TEAM = 23536XD8LD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PartialSheetExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -369,7 +369,7 @@
 				CODE_SIGN_ENTITLEMENTS = PartialSheetExample/PartialSheetExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PartialSheetExample/Preview Content\"";
-				DEVELOPMENT_TEAM = 23536XD8LD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PartialSheetExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
