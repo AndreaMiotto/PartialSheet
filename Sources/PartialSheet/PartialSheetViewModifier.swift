@@ -364,7 +364,7 @@ struct PartialSheetAddModifier<InnerContent: View>: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func partialSheet<Content: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) -> some View {
         modifier(PartialSheetAddModifier(isPresented: isPresented, content: content))
     }
