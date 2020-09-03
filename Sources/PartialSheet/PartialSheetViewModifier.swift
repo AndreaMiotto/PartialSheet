@@ -350,22 +350,42 @@ extension PartialSheet {
 
 }
 
-struct PartialSheetAddModifier<InnerContent: View>: ViewModifier {
+struct PartialSheetAddView<Base: View, InnerContent: View>: View {
     @EnvironmentObject var partialSheetManager: PartialSheetManager
     
-    let isPresented: Binding<Bool>
+    @Binding var isPresented: Bool
     let content: () -> InnerContent
+    let base: Base
     
-    public func body(content: Content) -> some View {
-        partialSheetManager.updatePartialSheet(isPresented: self.isPresented.wrappedValue, content: self.content, onDismiss: {
-            self.isPresented.wrappedValue = false
+    @State var model = Model()
+
+    var body: some View {
+        if model.update(value: isPresented) {
+            DispatchQueue.main.async(execute: updateContent)
+        }
+        return base
+    }
+    
+    func updateContent() {
+        partialSheetManager.updatePartialSheet(isPresented: isPresented, content: content, onDismiss: {
+            self.isPresented = false
         })
-        return content
+    }
+    
+    // hack around .onChange not being available in iOS13
+    class Model {
+        private var savedValue: Bool?
+        func update(value: Bool) -> Bool {
+            guard value != savedValue else { return false }
+            savedValue = value
+            return true
+        }
     }
 }
 
 public extension View {
     func partialSheet<Content: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) -> some View {
-        modifier(PartialSheetAddModifier(isPresented: isPresented, content: content))
+        PartialSheetAddView(isPresented: isPresented, content: content, base: self)
     }
 }
+
