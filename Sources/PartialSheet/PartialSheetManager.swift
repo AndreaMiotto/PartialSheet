@@ -54,9 +54,9 @@ public class PartialSheetManager: ObservableObject {
         self.isPresented = true
     }
     
-    public func updatePartialSheet<T>(isPresented: Bool, @ViewBuilder content: @escaping () -> T) where T: View {
+    public func updatePartialSheet<T>(isPresented: Bool, content: @escaping () -> T, onDismiss: @escaping () -> Void) where T: View {
         self.content = AnyView(content())
-        self.onDismiss = nil
+        self.onDismiss = onDismiss
         self.isPresented = isPresented
     }
 

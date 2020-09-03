@@ -357,7 +357,9 @@ struct PartialSheetAddModifier<InnerContent: View>: ViewModifier {
     let content: () -> InnerContent
     
     public func body(content: Content) -> some View {
-        partialSheetManager.updatePartialSheet(isPresented: self.isPresented.wrappedValue, content: self.content)
+        partialSheetManager.updatePartialSheet(isPresented: self.isPresented.wrappedValue, content: self.content, onDismiss: {
+            self.isPresented.wrappedValue = false
+        })
         return content
     }
 }
