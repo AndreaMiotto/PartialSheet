@@ -349,3 +349,21 @@ extension PartialSheet {
     }
 
 }
+
+struct PartialSheetAddModifier<InnerContent: View>: ViewModifier {
+    @EnvironmentObject var partialSheetManager: PartialSheetManager
+    
+    let isPresented: Binding<Bool>
+    let content: () -> InnerContent
+    
+    public func body(content: Content) -> some View {
+        partialSheetManager.updatePartialSheet(isPresented: self.isPresented.wrappedValue, content: self.content)
+        return content
+    }
+}
+
+extension View {
+    func partialSheet<Content: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) -> some View {
+        modifier(PartialSheetAddModifier(isPresented: isPresented, content: content))
+    }
+}

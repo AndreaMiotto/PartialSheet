@@ -53,6 +53,12 @@ public class PartialSheetManager: ObservableObject {
         self.onDismiss = onDismiss
         self.isPresented = true
     }
+    
+    public func updatePartialSheet<T>(isPresented: Bool, @ViewBuilder content: @escaping () -> T) where T: View {
+        self.content = AnyView(content())
+        self.onDismiss = nil
+        self.isPresented = isPresented
+    }
 
     /// Close the Partial Sheet and run the onDismiss function if it has been previously specified
     public func closePartialSheet() {
