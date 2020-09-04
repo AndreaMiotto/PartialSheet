@@ -388,4 +388,3 @@ public extension View {
         PartialSheetAddView(isPresented: isPresented, content: content, base: self)
     }
 }
-

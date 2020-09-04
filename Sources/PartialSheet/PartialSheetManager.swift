@@ -53,10 +53,16 @@ public class PartialSheetManager: ObservableObject {
         self.onDismiss = onDismiss
         self.isPresented = true
     }
-    
-    public func updatePartialSheet<T>(isPresented: Bool, content: @escaping () -> T, onDismiss: @escaping () -> Void) where T: View {
+
+    /**
+     Updates a **Partial Sheet**  with a dynamic height based on his content.
+    - parameter isPresented: If the partial sheet presented
+    - parameter content: The content to place inside of the Partial Sheet.
+    - parameter onDismiss: This code will be runned when the sheet is dismissed.
+    */
+    public func updatePartialSheet<T>(isPresented: Bool, content: @escaping () -> T, onDismiss: (() -> Void)? = nil) where T: View {
         self.content = AnyView(content())
-        self.onDismiss = onDismiss
+        self.onDismiss = onDismiss ?? self.onDismiss
         self.isPresented = isPresented
     }
 
