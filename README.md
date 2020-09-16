@@ -126,6 +126,22 @@ Button(action: {
 })
 ```
 
+You can also show the Partial Sheet using a *view modifier*:
+```Swift
+@State var isSheetShown = false
+
+...
+
+Button(action: {
+    self.isSheetShown = true
+}, label: {
+    Text("Display the ViewModifier sheet")
+})
+.partialSheet(isPresented: $isSheetShown) {
+    Text("This is a Partial Sheet")
+}
+```
+
 If you want a starting point copy in your SceneDelegate and in your ContentView files the following code:
 
 1. SceneDelegate:
