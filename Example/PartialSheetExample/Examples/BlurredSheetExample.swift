@@ -18,7 +18,8 @@ struct BlurredExample: View {
                                        enableCover: true,
                                        coverColor: Color.black.opacity(0.4),
                                        blurEffectStyle: nil,
-                                       cornerRadius: 10
+                                       cornerRadius: 10,
+                                       minTopDistance: 110
     )
         
     var body: some View {

@@ -36,7 +36,7 @@ struct PartialSheet: ViewModifier {
         return max(presenterContentRect.height +
             (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0) -
             sheetContentRect.height - handlerSectionHeight,
-                   110)
+                   style.minTopDistance)
     }
     
     /// The he point for the bottom anchor
