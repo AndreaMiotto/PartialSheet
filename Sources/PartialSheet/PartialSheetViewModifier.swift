@@ -312,14 +312,18 @@ extension PartialSheet {
         if let rect: CGRect = notification.userInfo![endFrame] as? CGRect {
             let height = rect.height
             let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
-            self.offset = height - (bottomInset ?? 0)
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                self.offset = height - (bottomInset ?? 0)
+            }
         }
     }
 
     /// Remove the keyboard offset
     private func keyboardHide(notification: Notification) {
         DispatchQueue.main.async {
-            self.offset = 0
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                self.offset = 0
+            }
         }
     }
     
