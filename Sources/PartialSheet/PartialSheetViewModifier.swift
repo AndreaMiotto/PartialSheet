@@ -23,13 +23,15 @@ struct PartialSheet: ViewModifier {
 
     /// The rect containing the presenter
     @State private var presenterContentRect: CGRect = .zero
-
     
     /// The rect containing the sheet content
     @State private var sheetContentRect: CGRect = .zero
     
     /// The offset for keyboard height
     @State private var offset: CGFloat = 0
+    
+    /// The offset for the drag gesture
+    @State private var dragOffset: CGFloat = 0
     
     /// The point for the top anchor
     private var topAnchor: CGFloat {
@@ -60,19 +62,16 @@ struct PartialSheet: ViewModifier {
     private var sheetPosition: CGFloat {
         if self.manager.isPresented {
             let topInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20.0 // 20.0 = To make sure we dont go under statusbar on screens without safe area inset
-            let position = self.topAnchor + self.dragState.translation.height - self.offset
+            let position = self.topAnchor + self.dragOffset - self.offset
             if position < topInset {
                 return topInset
             }
             
             return position
         } else {
-            return self.bottomAnchor - self.dragState.translation.height
+            return self.bottomAnchor - self.dragOffset
         }
     }
-    
-    /// The Gesture State for the drag gesture
-    @GestureState private var dragState = DragState.inactive
 
     /// Background of sheet
     private var background: AnyView {
@@ -216,7 +215,6 @@ extension PartialSheet {
                                     Color.clear.preference(key: SheetPreferenceKey.self, value: [PreferenceData(bounds: proxy.frame(in: .global))])
                                 }
                         )
-                        .animation(nil)
                     }
                     Spacer()
                 }
@@ -228,8 +226,6 @@ extension PartialSheet {
                 .cornerRadius(style.cornerRadius)
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
                 .offset(y: self.sheetPosition)
-                .animation(self.dragState.isDragging ?
-                            nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
                 .gesture(drag)
             }
         }
@@ -240,56 +236,68 @@ extension PartialSheet {
 extension PartialSheet {
 
     /// Create a new **DragGesture** with *updating* and *onEndend* func
-    private func dragGesture() -> _EndedGesture<GestureStateGesture<DragGesture, DragState>> {
+    private func dragGesture() -> _EndedGesture<_ChangedGesture<DragGesture>> {
         DragGesture(minimumDistance: 30, coordinateSpace: .local)
-            .updating($dragState) { drag, state, _ in
-                self.dismissKeyboard()
-                let yOffset = drag.translation.height
-                let threshold = CGFloat(-50)
-                let stiffness = CGFloat(0.3)
-                if yOffset > threshold {
-                    state = .dragging(translation: drag.translation)
-                } else if
-                    // if above threshold and belove ScreenHeight make it elastic
-                    -yOffset + self.sheetContentRect.height <
-                        UIScreen.main.bounds.height + self.handlerSectionHeight
-                {
-                    let distance = yOffset - threshold
-                    let translationHeight = threshold + (distance * stiffness)
-                    state = .dragging(translation: CGSize(width: drag.translation.width, height: translationHeight))
-                }
+            .onChanged(onDragChanged)
+            .onEnded(onDragEnded)
+    }
+    
+    private func onDragChanged(drag: DragGesture.Value) {
+        self.dismissKeyboard()
+        let yOffset = drag.translation.height
+        let threshold = CGFloat(-50)
+        let stiffness = CGFloat(0.3)
+        if yOffset > threshold {
+            dragOffset = drag.translation.height
+        } else if
+            // if above threshold and belove ScreenHeight make it elastic
+            -yOffset + self.sheetContentRect.height <
+                UIScreen.main.bounds.height + self.handlerSectionHeight
+        {
+            let distance = yOffset - threshold
+            let translationHeight = threshold + (distance * stiffness)
+            dragOffset = translationHeight
         }
-        .onEnded(onDragEnded)
     }
     
     /// The method called when the drag ends. It moves the sheet in the correct position based on the last drag gesture
     private func onDragEnded(drag: DragGesture.Value) {
         /// The drag direction
         let verticalDirection = drag.predictedEndLocation.y - drag.location.y
-        /// The current sheet position
-        let cardTopEdgeLocation = topAnchor + drag.translation.height
-        
-        // Get the closest anchor point based on the current position of the sheet
-        let closestPosition: CGFloat
-        
-        if (cardTopEdgeLocation - topAnchor) < (bottomAnchor - cardTopEdgeLocation) {
-            closestPosition = topAnchor
-        } else {
-            closestPosition = bottomAnchor
-        }
         
         // Set the correct anchor point based on the vertical direction of the drag
         if verticalDirection > 1 {
             DispatchQueue.main.async {
-                self.manager.isPresented = false
-                self.manager.onDismiss?()
+                withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                    dragOffset = 0
+                    self.manager.isPresented = false
+                    self.manager.onDismiss?()
+                }
             }
         } else if verticalDirection < 0 {
-            self.manager.isPresented = true
+            withAnimation {
+                dragOffset = 0
+                self.manager.isPresented = true
+            }
         } else {
-            self.manager.isPresented = (closestPosition == topAnchor)
-            if !manager.isPresented {
-                manager.onDismiss?()
+            /// The current sheet position
+            let cardTopEdgeLocation = topAnchor + drag.translation.height
+            
+            // Get the closest anchor point based on the current position of the sheet
+            let closestPosition: CGFloat
+            
+            if (cardTopEdgeLocation - topAnchor) < (bottomAnchor - cardTopEdgeLocation) {
+                closestPosition = topAnchor
+            } else {
+                closestPosition = bottomAnchor
+            }
+            
+            withAnimation {
+                dragOffset = 0
+                self.manager.isPresented = (closestPosition == topAnchor)
+                if !manager.isPresented {
+                    manager.onDismiss?()
+                }
             }
         }
     }
