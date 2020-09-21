@@ -43,11 +43,9 @@ struct AnimationSheetView: View {
             .cornerRadius(5)
             .scaleEffect(explicitScale)
             .onTapGesture {
-                DispatchQueue.main.async {
-                  withAnimation {
-                    explicitScale = CGFloat.random(in: 0.5..<1.5)
-                  }
-                }
+              withAnimation {
+                explicitScale = CGFloat.random(in: 0.5..<1.5)
+              }
             }
             
             Text("Tap to animate implicitly")
@@ -57,9 +55,7 @@ struct AnimationSheetView: View {
               .scaleEffect(implicitScale)
               .animation(.default)
               .onTapGesture {
-                  DispatchQueue.main.async {
-                    implicitScale = CGFloat.random(in: 0.5..<1.5)
-                  }
+                implicitScale = CGFloat.random(in: 0.5..<1.5)
               }
             
             Text("Tap to change with no animation")
@@ -68,9 +64,7 @@ struct AnimationSheetView: View {
               .cornerRadius(5)
               .scaleEffect(noScale)
               .onTapGesture {
-                  DispatchQueue.main.async {
-                    noScale = CGFloat.random(in: 0.5..<1.5)
-                  }
+                noScale = CGFloat.random(in: 0.5..<1.5)
               }
         }
       }
