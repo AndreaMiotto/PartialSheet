@@ -10,18 +10,13 @@ import SwiftUI
 
 struct AnimationContentExample: View {
   @EnvironmentObject var partialSheet: PartialSheetManager
-  
+
   var body: some View {
     VStack {
       Button(
         action: {
           self.partialSheet.showPartialSheet {
-            VStack(alignment: .leading, spacing: 0) {
-              Row(i: 0, isLoading: false)
-              ForEach(0 ..< 3) { i in
-                Row(i: i + 1, hasAnimation: i == 0)
-              }
-            }
+            AnimationSheetView()
           }
         },
         label: {
@@ -32,30 +27,53 @@ struct AnimationContentExample: View {
   }
 }
 
-struct Row: View {
-  let i: Int
+struct AnimationSheetView: View {
     
-  var hasAnimation: Bool = false
+    @State private var explicitScale: CGFloat = 1
+      
+    @State private var implicitScale: CGFloat = 1
+      
+    @State private var noScale: CGFloat = 1
     
-  @State var isLoading: Bool = true
-
-  var body: some View {
-    ZStack {
-        if !isLoading {
-          ZStack {
-            hasAnimation ? Color.red : Color.yellow
-
-            Text("Loaded view")
-          }
+    var body: some View {
+        VStack {
+          Text("Tap to animate explicitly")
+            .padding()
+            .background(Color.green)
+            .cornerRadius(5)
+            .scaleEffect(explicitScale)
+            .onTapGesture {
+                DispatchQueue.main.async {
+                  withAnimation {
+                    explicitScale = CGFloat.random(in: 0.5..<1.5)
+                  }
+                }
+            }
+            
+            Text("Tap to animate implicitly")
+              .padding()
+              .background(Color.orange)
+              .cornerRadius(5)
+              .scaleEffect(implicitScale)
+              .animation(.default)
+              .onTapGesture {
+                  DispatchQueue.main.async {
+                    implicitScale = CGFloat.random(in: 0.5..<1.5)
+                  }
+              }
+            
+            Text("Tap to change with no animation")
+              .padding()
+              .background(Color.red)
+              .cornerRadius(5)
+              .scaleEffect(noScale)
+              .onTapGesture {
+                  DispatchQueue.main.async {
+                    noScale = CGFloat.random(in: 0.5..<1.5)
+                  }
+              }
         }
-    }
-    .animation(hasAnimation ? .default : nil)
-    .onAppear {
-      DispatchQueue.main.asyncAfter(deadline: .now() + (1.0 * Double(i))) {
-        self.isLoading = false
       }
-    }
-  }
 }
 
 struct AnimationContentExample_Previews: PreviewProvider {
