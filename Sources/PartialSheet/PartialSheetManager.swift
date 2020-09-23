@@ -51,7 +51,11 @@ public class PartialSheetManager: ObservableObject {
     public func showPartialSheet<T>(_ onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> T) where T: View {
         self.content = AnyView(content())
         self.onDismiss = onDismiss
-        self.isPresented = true
+        DispatchQueue.main.async {
+            withAnimation {
+                self.isPresented = true
+            }
+        }
     }
 
     /**
@@ -68,7 +72,9 @@ public class PartialSheetManager: ObservableObject {
             self.onDismiss = onDismiss
         }
         if let isPresented = isPresented {
-            self.isPresented = isPresented
+            withAnimation {
+                self.isPresented = isPresented
+            }
         }
     }
 
