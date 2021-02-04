@@ -55,6 +55,8 @@ struct PickerSheetView: View {
                     ForEach(0 ..< strengths.count) {
                         Text(self.strengths[$0])
                     }
+                }.onTapGesture {
+                    // Fixes issue with scroll
                 }
             }
             .padding()

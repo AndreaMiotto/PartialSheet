@@ -237,7 +237,7 @@ extension PartialSheet {
 
     /// Create a new **DragGesture** with *updating* and *onEndend* func
     private func dragGesture() -> _EndedGesture<_ChangedGesture<DragGesture>> {
-        DragGesture(minimumDistance: 30, coordinateSpace: .local)
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged(onDragChanged)
             .onEnded(onDragEnded)
     }
