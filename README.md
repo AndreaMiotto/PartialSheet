@@ -218,20 +218,20 @@ struct PickerSheetView: View {
     @State private var selectedStrength = 0
 
     var body: some View {
-    VStack {
-VStack {
-Text("Settings Panel").font(.headline)
-Picker(selection: $selectedStrength, label: EmptyView()) {
-ForEach(0 ..< strengths.count) {
-Text(self.strengths[$0])
-}
-}.onTapGesture {
-// Fixes issue with scroll
-}
-}
-.padding()
-.frame(height: 250)
-}
-}
+        VStack {
+            VStack {
+                Text("Settings Panel").font(.headline)
+                Picker(selection: $selectedStrength, label: EmptyView()) {
+                    ForEach(0 ..< strengths.count) {
+                        Text(self.strengths[$0])
+                    }
+                }.onTapGesture {
+                    // Fixes issue with scroll
+                }
+            }
+            .padding()
+            .frame(height: 250)
+        }
+    }
 }
 ```
