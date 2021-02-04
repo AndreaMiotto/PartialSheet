@@ -32,13 +32,18 @@ struct PartialSheet: ViewModifier {
     
     /// The offset for the drag gesture
     @State private var dragOffset: CGFloat = 0
-    
+
     /// The point for the top anchor
     private var topAnchor: CGFloat {
-        return max(presenterContentRect.height +
+        let calculatedTop = presenterContentRect.height +
             (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0) -
-            sheetContentRect.height - handlerSectionHeight,
-                   style.minTopDistance)
+            sheetContentRect.height - handlerSectionHeight
+        
+        if calculatedTop > self.style.minTopDistance {
+            return calculatedTop
+        }
+        
+        return self.style.minTopDistance
     }
     
     /// The he point for the bottom anchor

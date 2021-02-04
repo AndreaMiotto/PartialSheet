@@ -19,7 +19,7 @@ struct BlurredExample: View {
                                        coverColor: Color.black.opacity(0.4),
                                        blurEffectStyle: nil,
                                        cornerRadius: 10,
-                                       minTopDistance: 110
+                                       minTopDistance: 200
     )
         
     var body: some View {
@@ -71,7 +71,7 @@ struct BlurredSheetView: View {
                 Text("The background of the sheet is blurred").font(.subheadline).foregroundColor(Color.white)
             }
             .padding()
-            .frame(height: 50)
+            .frame(height: 500)
         }
     }
 }
