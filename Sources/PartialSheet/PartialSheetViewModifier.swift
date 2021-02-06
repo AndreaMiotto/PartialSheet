@@ -28,7 +28,7 @@ struct PartialSheet: ViewModifier {
     @State private var sheetContentRect: CGRect = .zero
     
     /// The offset for keyboard height
-    @State private var offset: CGFloat = 0
+    @State private var keyboardOffset: CGFloat = 0
     
     /// The offset for the drag gesture
     @State private var dragOffset: CGFloat = 0
@@ -42,7 +42,7 @@ struct PartialSheet: ViewModifier {
             bottomSafeArea -
             sheetContentRect.height -
             handlerSectionHeight
-        
+          
         guard calculatedTop < style.minTopDistance else {
             return calculatedTop
         }
@@ -55,13 +55,6 @@ struct PartialSheet: ViewModifier {
         return UIScreen.main.bounds.height + 5
     }
     
-    /// The current anchor point, based if the **presented** property is true or false
-    private var currentAnchorPoint: CGFloat {
-        return manager.isPresented ?
-            topAnchor :
-        bottomAnchor
-    }
-    
     /// The height of the handler bar section
     private var handlerSectionHeight: CGFloat {
         return 30
@@ -70,8 +63,10 @@ struct PartialSheet: ViewModifier {
     /// Calculates the sheets y position
     private var sheetPosition: CGFloat {
         if self.manager.isPresented {
-            let topInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20.0 // 20.0 = To make sure we dont go under statusbar on screens without safe area inset
-            let position = self.topAnchor + self.dragOffset - self.offset
+            // 20.0 = To make sure we dont go under statusbar on screens without safe area inset
+            let topInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20.0
+            let position = self.topAnchor + self.dragOffset - self.keyboardOffset
+            
             if position < topInset {
                 return topInset
             }
@@ -229,6 +224,7 @@ extension PartialSheet {
                 }
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
                     self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    print(prefData.first?.bounds ?? "none")
                 })
                 .frame(width: UIScreen.main.bounds.width)
                 .background(self.background)
@@ -322,7 +318,7 @@ extension PartialSheet {
             let height = rect.height
             let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
             withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
-                self.offset = height - (bottomInset ?? 0)
+                self.keyboardOffset = height - (bottomInset ?? 0)
             }
         }
     }
@@ -331,7 +327,7 @@ extension PartialSheet {
     private func keyboardHide(notification: Notification) {
         DispatchQueue.main.async {
             withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
-                self.offset = 0
+                self.keyboardOffset = 0
             }
         }
     }
