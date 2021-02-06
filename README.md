@@ -126,6 +126,22 @@ Button(action: {
 })
 ```
 
+You can also show the Partial Sheet using a *view modifier*:
+```Swift
+@State var isSheetShown = false
+
+...
+
+Button(action: {
+    self.isSheetShown = true
+}, label: {
+    Text("Display the ViewModifier sheet")
+})
+.partialSheet(isPresented: $isSheetShown) {
+    Text("This is a Partial Sheet")
+}
+```
+
 If you want a starting point copy in your SceneDelegate and in your ContentView files the following code:
 
 1. SceneDelegate:
@@ -191,3 +207,31 @@ Remember to always add `import PartialSheet` in every file you want to use the P
 In the **Example** directory you can find more examples with more complex structures.
 
 
+
+###  Using Pickers
+
+When using pickers it is needed to register an onTapGesture. This some how makes the picker being able to reconize the drag before the dragGesture on the sheet.
+
+```
+struct PickerSheetView: View {
+    var strengths = ["Mild", "Medium", "Mature"]
+    @State private var selectedStrength = 0
+
+    var body: some View {
+        VStack {
+            VStack {
+                Text("Settings Panel").font(.headline)
+                Picker(selection: $selectedStrength, label: EmptyView()) {
+                    ForEach(0 ..< strengths.count) {
+                        Text(self.strengths[$0])
+                    }
+                }.onTapGesture {
+                    // Fixes issue with scroll
+                }
+            }
+            .padding()
+            .frame(height: 250)
+        }
+    }
+}
+```

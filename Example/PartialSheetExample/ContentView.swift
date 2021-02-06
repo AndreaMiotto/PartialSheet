@@ -19,7 +19,7 @@ struct ContentView: View {
                 Text("""
                 Hi, this is the Partial Sheet modifier.
 
-                On iPhone devices it allows you to dispaly a totally custom sheet with a relative height based on his content.
+                On iPhone devices it allows you to display a totally custom sheet with a relative height based on its content.
                 In this way the sheet will cover the screen only for the space it will need.
 
                 On iPad and Mac devices it will present a normal .sheet view.
@@ -31,27 +31,21 @@ struct ContentView: View {
                     .padding()
 
                 List {
-
                     NavigationLink(
                         destination: NormalExample(),
                         label: {Text("Normal Example")
-
                     })
                     NavigationLink(
                         destination: TextfieldExample(),
-                        label: {
-                            Text("Textfield Example")
-
+                        label: {Text("Textfield Example")
                     })
                     NavigationLink(
                         destination: ListExample(),
                         label: {Text("List Example")
-
                     })
                     NavigationLink(
                         destination: PushNavigationExample(),
                         label: {Text("Push Navigation Example")
-
                     })
                     NavigationLink(
                         destination: DatePickerExample(),
@@ -64,6 +58,14 @@ struct ContentView: View {
                     NavigationLink(
                         destination: BlurredExample(),
                         label: {Text("Blurred Example")
+                    })
+                    NavigationLink(
+                        destination: ViewModifierExample(),
+                        label: {Text("ViewModifier Example")
+                    })
+                    NavigationLink(
+                        destination: AnimationContentExample(),
+                        label: {Text("AnimationContent Example")
                     })
                 }
                 Spacer()

@@ -35,6 +35,9 @@ public struct PartialSheetStyle {
     /// The corner radius of Sheet
     var cornerRadius: CGFloat
 
+    /// Minimum distance between the top of the sheet and the top of the screen
+    var minTopDistance: CGFloat
+  
     /// Inits the style
     ///
     /// - Parameters:
@@ -44,18 +47,21 @@ public struct PartialSheetStyle {
     ///   - coverColor: The background cover color
     ///   - blurEffectStyle: A blur effect style to use on the background covor (behind the sheet)
     ///   - cornerRadius: The corner radius for the sheet
+    ///   - minTopDistance: Minimum distance between the top of the sheet and the top of the screen
     public init(background: PartialSheetBackground,
                 handlerBarColor: Color,
                 enableCover: Bool,
                 coverColor: Color,
                 blurEffectStyle: UIBlurEffect.Style? = nil,
-                cornerRadius: CGFloat
+                cornerRadius: CGFloat,
+                minTopDistance: CGFloat
     ) {
         self.background = background
         self.handlerBarColor = handlerBarColor
         self.enableCover = enableCover
         self.coverColor = coverColor
         self.cornerRadius = cornerRadius
+        self.minTopDistance = minTopDistance
     }
 }
 
@@ -75,7 +81,8 @@ extension PartialSheetStyle {
                                  enableCover: true,
                                  coverColor: Color.black.opacity(0.4),
                                  blurEffectStyle: nil,
-                                 cornerRadius: 10
+                                 cornerRadius: 10,
+                                 minTopDistance: 110
         )
     }
 }

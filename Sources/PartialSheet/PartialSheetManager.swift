@@ -35,7 +35,7 @@ public class PartialSheetManager: ObservableObject {
         }
     }
     /// The content of the sheet
-    private(set) var content: AnyView
+    @Published private(set) var content: AnyView
     /// the onDismiss code runned when the partial sheet is closed
     private(set) var onDismiss: (() -> Void)?
 
@@ -51,12 +51,38 @@ public class PartialSheetManager: ObservableObject {
     public func showPartialSheet<T>(_ onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> T) where T: View {
         self.content = AnyView(content())
         self.onDismiss = onDismiss
-        self.isPresented = true
+        DispatchQueue.main.async {
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                self.isPresented = true
+            }
+        }
+    }
+
+    /**
+     Updates some properties of the **Partial Sheet**
+    - parameter isPresented: If the partial sheet is presented
+    - parameter content: The content to place inside of the Partial Sheet.
+    - parameter onDismiss: This code will be runned when the sheet is dismissed.
+    */
+    public func updatePartialSheet<T>(isPresented: Bool? = nil, content: (() -> T)? = nil, onDismiss: (() -> Void)? = nil) where T: View {
+        if let content = content {
+            self.content = AnyView(content())
+        }
+        if let onDismiss = onDismiss {
+            self.onDismiss = onDismiss
+        }
+        if let isPresented = isPresented {
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                self.isPresented = isPresented
+            }
+        }
     }
 
     /// Close the Partial Sheet and run the onDismiss function if it has been previously specified
     public func closePartialSheet() {
-        self.isPresented = false
+        withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+            self.isPresented = false
+        }
         self.onDismiss?()
     }
 }
