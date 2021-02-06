@@ -19,7 +19,7 @@ struct TextfieldExample: View {
                 self.partialSheetManager.showPartialSheet({
                     print("text sheet dismissed")
                 }) {
-                     SheetTextFieldView()
+                    SheetTextFieldView()
                 }
             }, label: {
                 Text("Display the Partial Shehet")
@@ -47,6 +47,8 @@ struct SheetTextFieldView: View {
     @State private var longer: Bool = false
     @State private var text: String = "some text"
     
+    @EnvironmentObject var partialSheetManager : PartialSheetManager
+
     
     var body: some View {
         VStack {
@@ -63,6 +65,10 @@ struct SheetTextFieldView: View {
                 
                 Toggle(isOn: self.$longer) {
                     Text("Advanced")
+                }
+                
+                Button("Close Button") {
+                    self.partialSheetManager.closePartialSheet()
                 }
             }
             .padding()

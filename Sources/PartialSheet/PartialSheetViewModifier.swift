@@ -188,7 +188,7 @@ extension PartialSheet {
                 }
                 .edgesIgnoringSafeArea(.vertical)
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
                         self.manager.isPresented = false
                         self.dismissKeyboard()
                         self.manager.onDismiss?()
@@ -219,7 +219,9 @@ extension PartialSheet {
                     Spacer()
                 }
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
-                    self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                        self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    }
                 })
                 .frame(width: UIScreen.main.bounds.width)
                 .background(self.background)
@@ -275,7 +277,7 @@ extension PartialSheet {
                 }
             }
         } else if verticalDirection < 0 {
-            withAnimation {
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
                 dragOffset = 0
                 self.manager.isPresented = true
             }
@@ -292,7 +294,7 @@ extension PartialSheet {
                 closestPosition = bottomAnchor
             }
             
-            withAnimation {
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
                 dragOffset = 0
                 self.manager.isPresented = (closestPosition == topAnchor)
                 if !manager.isPresented {

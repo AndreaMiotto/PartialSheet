@@ -52,7 +52,7 @@ public class PartialSheetManager: ObservableObject {
         self.content = AnyView(content())
         self.onDismiss = onDismiss
         DispatchQueue.main.async {
-            withAnimation {
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
                 self.isPresented = true
             }
         }
@@ -72,7 +72,7 @@ public class PartialSheetManager: ObservableObject {
             self.onDismiss = onDismiss
         }
         if let isPresented = isPresented {
-            withAnimation {
+            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
                 self.isPresented = isPresented
             }
         }
@@ -80,7 +80,9 @@ public class PartialSheetManager: ObservableObject {
 
     /// Close the Partial Sheet and run the onDismiss function if it has been previously specified
     public func closePartialSheet() {
-        self.isPresented = false
+        withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+            self.isPresented = false
+        }
         self.onDismiss?()
     }
 }
