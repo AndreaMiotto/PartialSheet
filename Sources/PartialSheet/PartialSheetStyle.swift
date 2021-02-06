@@ -34,10 +34,20 @@ public struct PartialSheetStyle {
 
     /// The corner radius of Sheet
     var cornerRadius: CGFloat
-    
+
     /// Minimum distance between the top of the sheet and the top of the screen
     var minTopDistance: CGFloat
-    
+  
+    /// Inits the style
+    ///
+    /// - Parameters:
+    ///   - background: The background to use
+    ///   - handlerBarColor: The handlebar color
+    ///   - enableCover: If the background cover is shown (behind the sheet)
+    ///   - coverColor: The background cover color
+    ///   - blurEffectStyle: A blur effect style to use on the background covor (behind the sheet)
+    ///   - cornerRadius: The corner radius for the sheet
+    ///   - minTopDistance: Minimum distance between the top of the sheet and the top of the screen
     public init(background: PartialSheetBackground,
                 handlerBarColor: Color,
                 enableCover: Bool,
