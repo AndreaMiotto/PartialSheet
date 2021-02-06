@@ -224,7 +224,6 @@ extension PartialSheet {
                 }
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
                     self.sheetContentRect = prefData.first?.bounds ?? .zero
-                    print(prefData.first?.bounds ?? "none")
                 })
                 .frame(width: UIScreen.main.bounds.width)
                 .background(self.background)
