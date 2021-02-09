@@ -19,7 +19,7 @@ struct BlurredExample: View {
                                        coverColor: Color.black.opacity(0.4),
                                        blurEffectStyle: nil,
                                        cornerRadius: 10,
-                                       minTopDistance: 110
+                                       minTopDistance: 350
     )
         
     var body: some View {
@@ -69,9 +69,15 @@ struct BlurredSheetView: View {
             Group {
                 Text("Settings Panel").font(.headline).foregroundColor(Color.white)
                 Text("The background of the sheet is blurred").font(.subheadline).foregroundColor(Color.white)
+                Text("We also set a minTopDistance").font(.subheadline).foregroundColor(Color.white)
+                Text("The background of the sheet is blurred").font(.subheadline).foregroundColor(Color.white)
+                Text("We also set a minTopDistance").font(.subheadline).foregroundColor(Color.white)
+                Text("The background of the sheet is blurred").font(.subheadline).foregroundColor(Color.white)
+                Text("We also set a minTopDistance").font(.subheadline).foregroundColor(Color.white)
+                Text("The background of the sheet is blurred").font(.subheadline).foregroundColor(Color.white)
+                Text("We also set a minTopDistance").font(.subheadline).foregroundColor(Color.white)
             }
             .padding()
-            .frame(height: 50)
         }
     }
 }
