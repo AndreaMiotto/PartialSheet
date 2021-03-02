@@ -38,6 +38,7 @@ public class PartialSheetManager: ObservableObject {
     @Published private(set) var content: AnyView
     /// the onDismiss code runned when the partial sheet is closed
     private(set) var onDismiss: (() -> Void)?
+    public var defaultAnimation: Animation = .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)
 
     public init() {
         self.content = AnyView(EmptyView())
@@ -49,10 +50,24 @@ public class PartialSheetManager: ObservableObject {
      - parameter onDismiss: This code will be runned when the sheet is dismissed.
      */
     public func showPartialSheet<T>(_ onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> T) where T: View {
+        guard !isPresented else {
+            withAnimation(defaultAnimation) {
+                updatePartialSheet(
+                    content: {
+                        // do not animate the content, just the partial sheet
+                        withAnimation(nil) {
+                            content()
+                        }
+                    },
+                    onDismiss: onDismiss)
+            }
+            return
+        }
+
         self.content = AnyView(content())
         self.onDismiss = onDismiss
         DispatchQueue.main.async {
-            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+            withAnimation(self.defaultAnimation) {
                 self.isPresented = true
             }
         }
@@ -72,7 +87,7 @@ public class PartialSheetManager: ObservableObject {
             self.onDismiss = onDismiss
         }
         if let isPresented = isPresented {
-            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+            withAnimation(defaultAnimation) {
                 self.isPresented = isPresented
             }
         }
@@ -80,7 +95,7 @@ public class PartialSheetManager: ObservableObject {
 
     /// Close the Partial Sheet and run the onDismiss function if it has been previously specified
     public func closePartialSheet() {
-        withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+        withAnimation(defaultAnimation) {
             self.isPresented = false
         }
         self.onDismiss?()
