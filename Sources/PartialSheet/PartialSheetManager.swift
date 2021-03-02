@@ -38,6 +38,8 @@ public class PartialSheetManager: ObservableObject {
     @Published private(set) var content: AnyView
     /// the onDismiss code runned when the partial sheet is closed
     private(set) var onDismiss: (() -> Void)?
+
+    /// Possibility to customize the slide in/out animation of the partial sheet
     public var defaultAnimation: Animation = .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)
 
     public init() {
