@@ -48,7 +48,7 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 - \[x] Mac compatibility
 
 #### Nice to have
-- \[ ] ScrcrollView and List compatibility: as soon as Apple adds some API to handle better ScrollViews
+- \[ ] ScrollView and List compatibility: as soon as Apple adds some API to handle better ScrollViews
 
 ## Version 2
 The new version brings a lot of breaking changes and a lot of improvments:
