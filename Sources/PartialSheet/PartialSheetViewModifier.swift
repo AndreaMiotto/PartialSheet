@@ -308,21 +308,29 @@ extension PartialSheet {
 
     /// Add the keyboard offset
     private func keyboardShow(notification: Notification) {
-        let endFrame = UIResponder.keyboardFrameEndUserInfoKey
-        if let rect: CGRect = notification.userInfo![endFrame] as? CGRect {
-            let height = rect.height
-            let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
-            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
-                self.offset = height - (bottomInset ?? 0)
+        if #available(iOS 14.0, *) {
+            
+        } else {
+            let endFrame = UIResponder.keyboardFrameEndUserInfoKey
+            if let rect: CGRect = notification.userInfo![endFrame] as? CGRect {
+                let height = rect.height
+                let bottomInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom
+                withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                    self.offset = height - (bottomInset ?? 0)
+                }
             }
         }
     }
 
     /// Remove the keyboard offset
     private func keyboardHide(notification: Notification) {
-        DispatchQueue.main.async {
-            withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
-                self.offset = 0
+        if #available(iOS 14.0, *) {
+            
+        } else {
+            DispatchQueue.main.async {
+                withAnimation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0)) {
+                    self.offset = 0
+                }
             }
         }
     }
