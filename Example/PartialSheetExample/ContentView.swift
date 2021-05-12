@@ -67,6 +67,10 @@ struct ContentView: View {
                         destination: AnimationContentExample(),
                         label: {Text("AnimationContent Example")
                     })
+                    NavigationLink(
+                        destination: HandlerBarFreeExample(),
+                        label: {Text("HandlerBarFree Example")
+                    })
                 }
                 Spacer()
                 Spacer()
