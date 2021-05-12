@@ -22,6 +22,7 @@
 		1F177A7723E1ECC6006F59D0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F177A7623E1ECC6006F59D0 /* Preview Assets.xcassets */; };
 		1F177AA623E1F0E0006F59D0 /* PartialSheetViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F177AA323E1F0E0006F59D0 /* PartialSheetViewModifier.swift */; };
 		1F177AA823E1F0E0006F59D0 /* View+PartialSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F177AA523E1F0E0006F59D0 /* View+PartialSheetModifier.swift */; };
+		20543C90264BEA7400A6CE96 /* HandlerBarFreeExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20543C8F264BEA7400A6CE96 /* HandlerBarFreeExample.swift */; };
 		3B183BFC25CC8C9500CDC858 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3B183BFB25CC8C9400CDC858 /* README.md */; };
 		3B9841FC24E880870052A996 /* PickerExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9841FA24E880870052A996 /* PickerExample.swift */; };
 		3B9841FD24E880870052A996 /* DatePickerExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9841FB24E880870052A996 /* DatePickerExample.swift */; };
@@ -49,6 +50,7 @@
 		1F177A7B23E1ECC6006F59D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F177AA323E1F0E0006F59D0 /* PartialSheetViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartialSheetViewModifier.swift; sourceTree = "<group>"; };
 		1F177AA523E1F0E0006F59D0 /* View+PartialSheetModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+PartialSheetModifier.swift"; sourceTree = "<group>"; };
+		20543C8F264BEA7400A6CE96 /* HandlerBarFreeExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlerBarFreeExample.swift; sourceTree = "<group>"; };
 		3B183BFB25CC8C9400CDC858 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		3B9841FA24E880870052A996 /* PickerExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerExample.swift; sourceTree = "<group>"; };
 		3B9841FB24E880870052A996 /* DatePickerExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerExample.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				3BF874DE24E6F4DE004F4550 /* BlurredSheetExample.swift */,
 				F8E410DD25015F710064D3A6 /* ViewModifierExample.swift */,
 				9C721F212519347C007E46D4 /* AnimationContentExample.swift */,
+				20543C8F264BEA7400A6CE96 /* HandlerBarFreeExample.swift */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				01A013942458E4A900D0F5DD /* NormalExample.swift in Sources */,
 				1F177A6E23E1ECC3006F59D0 /* AppDelegate.swift in Sources */,
 				01477D8B2458E928007AE720 /* PartialSheetManager.swift in Sources */,
+				20543C90264BEA7400A6CE96 /* HandlerBarFreeExample.swift in Sources */,
 				1F177AA823E1F0E0006F59D0 /* View+PartialSheetModifier.swift in Sources */,
 				1DDC0E5923E3E6DB0033EC03 /* ContentView.swift in Sources */,
 				3B9841FD24E880870052A996 /* DatePickerExample.swift in Sources */,

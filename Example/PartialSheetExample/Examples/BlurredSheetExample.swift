@@ -14,7 +14,7 @@ struct BlurredExample: View {
     // - recommended way is adding one global sheet as per the documentation.
     let sheetManager: PartialSheetManager = PartialSheetManager()
     let sheetStyle = PartialSheetStyle(background: .blur(.systemMaterialDark),
-                                       handlerBarColor: Color(UIColor.systemGray2),
+                                       accentColor: Color(UIColor.systemGray2),
                                        enableCover: true,
                                        coverColor: Color.black.opacity(0.4),
                                        blurEffectStyle: nil,
