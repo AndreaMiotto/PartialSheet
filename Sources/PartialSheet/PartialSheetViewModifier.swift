@@ -378,10 +378,15 @@ struct PartialSheetAddView<Base: View, InnerContent: View>: View {
     @State var model = Model()
 
     var body: some View {
-        if model.update(value: isPresented) {
-            DispatchQueue.main.async(execute: updateContent)
+        if #available(iOS 14.0, *) {
+            return AnyView(base
+                .onChange(of: isPresented, perform: {_ in updateContent() }))
+        } else {
+            if model.update(value: isPresented) {
+                DispatchQueue.main.async(execute: updateContent)
+            }
+            return AnyView(base)
         }
-        return base
     }
     
     func updateContent() {
