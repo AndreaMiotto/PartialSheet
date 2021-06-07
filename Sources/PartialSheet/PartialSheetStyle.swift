@@ -17,11 +17,19 @@ public struct PartialSheetStyle {
         case blur(UIBlurEffect.Style)
     }
     
+    public enum PartialSheetHanderBarStyle {
+        case solid(Color)
+        case none
+    }
+    
     /// The background of the sheet
     var background: PartialSheetBackground
 
-    /// The color of the Handlander Bar and the X button on ipad and mac
-    var handlerBarColor: Color
+    /// The style of the Handlander Bar
+    var handlerBarStyle: PartialSheetHanderBarStyle
+    
+    /// Color for the X button on ipad and mac
+    var iPadCloseButtonColor: Color
 
     /// Tells if should be there a cover between the Partial Sheet and the Content
     var enableCover: Bool
@@ -37,19 +45,52 @@ public struct PartialSheetStyle {
 
     /// Minimum distance between the top of the sheet and the top of the screen
     var minTopDistance: CGFloat
-  
+    
     /// Inits the style
     ///
     /// - Parameters:
     ///   - background: The background to use
-    ///   - handlerBarColor: The handlebar color
+    ///   - handlerBarStyle: The handlebar style
+    ///   - iPadCloseButtonColor: The iPad close button Color
     ///   - enableCover: If the background cover is shown (behind the sheet)
     ///   - coverColor: The background cover color
     ///   - blurEffectStyle: A blur effect style to use on the background covor (behind the sheet)
     ///   - cornerRadius: The corner radius for the sheet
     ///   - minTopDistance: Minimum distance between the top of the sheet and the top of the screen
     public init(background: PartialSheetBackground,
-                handlerBarColor: Color,
+                accentColor: Color,
+                enableCover: Bool,
+                coverColor: Color,
+                blurEffectStyle: UIBlurEffect.Style? = nil,
+                cornerRadius: CGFloat,
+                minTopDistance: CGFloat
+    ) {
+        self.init(
+            background: background,
+            handlerBarStyle: .solid(accentColor),
+            iPadCloseButtonColor: accentColor,
+            enableCover: enableCover,
+            coverColor: coverColor,
+            blurEffectStyle: blurEffectStyle,
+            cornerRadius: cornerRadius,
+            minTopDistance: minTopDistance
+        )
+    }
+  
+    /// Inits the style
+    ///
+    /// - Parameters:
+    ///   - background: The background to use
+    ///   - handlerBarStyle: The handlebar style
+    ///   - iPadCloseButtonColor: The iPad close button Color
+    ///   - enableCover: If the background cover is shown (behind the sheet)
+    ///   - coverColor: The background cover color
+    ///   - blurEffectStyle: A blur effect style to use on the background covor (behind the sheet)
+    ///   - cornerRadius: The corner radius for the sheet
+    ///   - minTopDistance: Minimum distance between the top of the sheet and the top of the screen
+    public init(background: PartialSheetBackground,
+                handlerBarStyle: PartialSheetHanderBarStyle,
+                iPadCloseButtonColor: Color,
                 enableCover: Bool,
                 coverColor: Color,
                 blurEffectStyle: UIBlurEffect.Style? = nil,
@@ -57,7 +98,8 @@ public struct PartialSheetStyle {
                 minTopDistance: CGFloat
     ) {
         self.background = background
-        self.handlerBarColor = handlerBarColor
+        self.handlerBarStyle = handlerBarStyle
+        self.iPadCloseButtonColor = iPadCloseButtonColor
         self.enableCover = enableCover
         self.coverColor = coverColor
         self.cornerRadius = cornerRadius
@@ -77,7 +119,8 @@ extension PartialSheetStyle {
      */
     public static func defaultStyle() -> PartialSheetStyle {
         return PartialSheetStyle(background: .solid(Color(UIColor.tertiarySystemBackground)),
-                                 handlerBarColor: Color(UIColor.systemGray2),
+                                 handlerBarStyle: .solid(Color(UIColor.systemGray2)),
+                                 iPadCloseButtonColor: Color(UIColor.systemGray2),
                                  enableCover: true,
                                  coverColor: Color.black.opacity(0.4),
                                  blurEffectStyle: nil,

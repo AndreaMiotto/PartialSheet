@@ -59,7 +59,10 @@ struct PartialSheet: ViewModifier {
     
     /// The height of the handler bar section
     private var handlerSectionHeight: CGFloat {
-        return 30
+        switch style.handlerBarStyle {
+            case .solid: return 30
+            case .none: return 0
+        }
     }
     
     /// Calculates the sheets y position
@@ -161,7 +164,7 @@ extension PartialSheet {
                     self.manager.isPresented = false
                 }, label: {
                     Image(systemName: "xmark")
-                        .foregroundColor(style.handlerBarColor)
+                        .foregroundColor(style.iPadCloseButtonColor)
                         .padding(.horizontal)
                         .padding(.top)
                 })
@@ -204,15 +207,19 @@ extension PartialSheet {
             // The SHEET VIEW
             Group {
                 VStack(spacing: 0) {
-                    // This is the little rounded bar (HANDLER) on top of the sheet
-                    VStack {
-                        Spacer()
-                        RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
-                            .frame(width: 40, height: 5)
-                            .foregroundColor(self.style.handlerBarColor)
-                        Spacer()
+                    switch style.handlerBarStyle {
+                    case .solid(let handlerBarColor): // This is the little rounded bar (HANDLER) on top of the sheet
+                        VStack {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
+                                .frame(width: 40, height: 5)
+                                .foregroundColor(handlerBarColor)
+                            Spacer()
+                        }
+                        .frame(height: handlerSectionHeight)
+                    case .none: EmptyView()
                     }
-                    .frame(height: handlerSectionHeight)
+                    
                     VStack {
                         // Attach the SHEET CONTENT
                         self.manager.content
