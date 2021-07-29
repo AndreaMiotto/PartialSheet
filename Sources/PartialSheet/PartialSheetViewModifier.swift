@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 /// This is the modifier for the Partial Sheet
+@available(iOSApplicationExtension, unavailable)
 struct PartialSheet: ViewModifier {
     
     // MARK: - Public Properties
@@ -151,6 +152,7 @@ struct PartialSheet: ViewModifier {
 }
 
 //MARK: - Platfomr Specific Sheet Builders
+@available(iOSApplicationExtension, unavailable)
 extension PartialSheet {
 
     //MARK: - Mac and iPad Sheet Builder
@@ -248,6 +250,7 @@ extension PartialSheet {
 }
 
 // MARK: - Drag Gesture & Handler
+@available(iOSApplicationExtension, unavailable)
 extension PartialSheet {
 
     /// Create a new **DragGesture** with *updating* and *onEndend* func
@@ -319,6 +322,7 @@ extension PartialSheet {
 }
 
 // MARK: - Keyboard Handlers Methods
+@available(iOSApplicationExtension, unavailable)
 extension PartialSheet {
 
     /// Add the keyboard offset
@@ -352,6 +356,7 @@ extension PartialSheet {
 }
 
 // MARK: - PreferenceKeys Handlers
+@available(iOSApplicationExtension, unavailable) 
 extension PartialSheet {
 
     /// Preference Key for the Sheet Presener
