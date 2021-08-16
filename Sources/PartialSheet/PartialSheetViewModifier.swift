@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 /// This is the modifier for the Partial Sheet
+@available(iOSApplicationExtension, unavailable)
 struct PartialSheet: ViewModifier {
     
     // MARK: - Public Properties
@@ -151,6 +152,7 @@ struct PartialSheet: ViewModifier {
 }
 
 //MARK: - Platfomr Specific Sheet Builders
+@available(iOSApplicationExtension, unavailable)
 extension PartialSheet {
 
     //MARK: - Mac and iPad Sheet Builder
@@ -248,11 +250,12 @@ extension PartialSheet {
 }
 
 // MARK: - Drag Gesture & Handler
+@available(iOSApplicationExtension, unavailable)
 extension PartialSheet {
 
     /// Create a new **DragGesture** with *updating* and *onEndend* func
     private func dragGesture() -> _EndedGesture<_ChangedGesture<DragGesture>> {
-        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+        DragGesture(minimumDistance: 0.1, coordinateSpace: .local)
             .onChanged(onDragChanged)
             .onEnded(onDragEnded)
     }
@@ -319,6 +322,7 @@ extension PartialSheet {
 }
 
 // MARK: - Keyboard Handlers Methods
+@available(iOSApplicationExtension, unavailable)
 extension PartialSheet {
 
     /// Add the keyboard offset
@@ -352,6 +356,7 @@ extension PartialSheet {
 }
 
 // MARK: - PreferenceKeys Handlers
+@available(iOSApplicationExtension, unavailable) 
 extension PartialSheet {
 
     /// Preference Key for the Sheet Presener
@@ -387,10 +392,15 @@ struct PartialSheetAddView<Base: View, InnerContent: View>: View {
     @State var model = Model()
 
     var body: some View {
-        if model.update(value: isPresented) {
-            DispatchQueue.main.async(execute: updateContent)
+        if #available(iOS 14.0, *) {
+            return AnyView(base
+                .onChange(of: isPresented, perform: {_ in updateContent() }))
+        } else {
+            if model.update(value: isPresented) {
+                DispatchQueue.main.async(execute: updateContent)
+            }
+            return AnyView(base)
         }
-        return base
     }
     
     func updateContent() {
