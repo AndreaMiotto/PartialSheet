@@ -160,16 +160,18 @@ extension PartialSheet {
     /// This is the builder for the sheet content for iPad and Mac devices only
     private func iPadAndMacSheet() -> some View {
         VStack {
-            HStack {
-                Spacer()
-                Button(action: {
-                    self.manager.isPresented = false
-                }, label: {
-                    Image(systemName: "xmark")
-                        .foregroundColor(style.iPadCloseButtonColor)
-                        .padding(.horizontal)
-                        .padding(.top)
-                })
+            if (self.style.userDismissable) {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        self.manager.isPresented = false
+                    }, label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(style.iPadCloseButtonColor)
+                            .padding(.horizontal)
+                            .padding(.top)
+                    })
+                }
             }
             self.manager.content
             Spacer()
@@ -200,9 +202,11 @@ extension PartialSheet {
                 .edgesIgnoringSafeArea(.vertical)
                 .onTapGesture {
                     withAnimation(manager.defaultAnimation) {
-                        self.manager.isPresented = false
-                        self.dismissKeyboard()
-                        self.manager.onDismiss?()
+                        if (self.style.userDismissable) {
+                            self.manager.isPresented = false
+                            self.dismissKeyboard()
+                            self.manager.onDismiss?()
+                        }
                     }
                 }
             }
@@ -287,9 +291,11 @@ extension PartialSheet {
         if verticalDirection > 1 {
             DispatchQueue.main.async {
                 withAnimation(manager.defaultAnimation) {
-                    dragOffset = 0
-                    self.manager.isPresented = false
-                    self.manager.onDismiss?()
+                    if (self.style.userDismissable) {
+                        dragOffset = 0
+                        self.manager.isPresented = false
+                        self.manager.onDismiss?()
+                    }
                 }
             }
         } else if verticalDirection < 0 {
@@ -297,7 +303,7 @@ extension PartialSheet {
                 dragOffset = 0
                 self.manager.isPresented = true
             }
-        } else {
+        } else if (self.style.userDismissable) {
             /// The current sheet position
             let cardTopEdgeLocation = topAnchor + drag.translation.height
             

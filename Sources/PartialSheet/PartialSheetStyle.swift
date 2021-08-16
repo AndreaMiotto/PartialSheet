@@ -46,6 +46,9 @@ public struct PartialSheetStyle {
     /// Minimum distance between the top of the sheet and the top of the screen
     var minTopDistance: CGFloat
     
+    /// Allows the user to dismiss the Partial Sheet manually
+    var userDismissable: Bool
+    
     /// Inits the style
     ///
     /// - Parameters:
@@ -63,7 +66,8 @@ public struct PartialSheetStyle {
                 coverColor: Color,
                 blurEffectStyle: UIBlurEffect.Style? = nil,
                 cornerRadius: CGFloat,
-                minTopDistance: CGFloat
+                minTopDistance: CGFloat,
+                userDismissable: Bool = true
     ) {
         self.init(
             background: background,
@@ -73,7 +77,8 @@ public struct PartialSheetStyle {
             coverColor: coverColor,
             blurEffectStyle: blurEffectStyle,
             cornerRadius: cornerRadius,
-            minTopDistance: minTopDistance
+            minTopDistance: minTopDistance,
+            userDismissable: userDismissable
         )
     }
   
@@ -95,7 +100,8 @@ public struct PartialSheetStyle {
                 coverColor: Color,
                 blurEffectStyle: UIBlurEffect.Style? = nil,
                 cornerRadius: CGFloat,
-                minTopDistance: CGFloat
+                minTopDistance: CGFloat,
+                userDismissable: Bool = true
     ) {
         self.background = background
         self.handlerBarStyle = handlerBarStyle
@@ -104,6 +110,7 @@ public struct PartialSheetStyle {
         self.coverColor = coverColor
         self.cornerRadius = cornerRadius
         self.minTopDistance = minTopDistance
+        self.userDismissable = userDismissable
     }
 }
 
@@ -125,7 +132,8 @@ extension PartialSheetStyle {
                                  coverColor: Color.black.opacity(0.4),
                                  blurEffectStyle: nil,
                                  cornerRadius: 10,
-                                 minTopDistance: 110
+                                 minTopDistance: 110,
+                                 userDismissable: true
         )
     }
 }
