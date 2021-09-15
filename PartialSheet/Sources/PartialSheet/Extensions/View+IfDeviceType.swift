@@ -14,20 +14,19 @@ internal enum DeviceType {
     case mac
 }
 
-internal var deviceType: DeviceType = {
-    #if targetEnvironment(macCatalyst)
+var deviceType: DeviceType = {
+#if targetEnvironment(macCatalyst)
     return .mac
-    #else
+#else
     if UIDevice.current.userInterfaceIdiom == .pad {
         return .ipad
     } else {
         return .iphone
     }
-    #endif
+#endif
 }()
 
-internal extension View {
-
+extension View {
     @ViewBuilder func ifIs<T>(_ condition: Bool, transform: (Self) -> T) -> some View where T: View {
         if condition {
             transform(self)
@@ -35,7 +34,7 @@ internal extension View {
             self
         }
     }
-
+    
     @ViewBuilder func iPhone<T>(_ transform: (Self) -> T) -> some View where T: View {
         if deviceType == .iphone {
             transform(self)
@@ -43,7 +42,7 @@ internal extension View {
             self
         }
     }
-
+    
     @ViewBuilder func iPad<T>(_ transform: (Self) -> T) -> some View where T: View {
         if deviceType == .ipad {
             transform(self)
@@ -51,7 +50,7 @@ internal extension View {
             self
         }
     }
-
+    
     @ViewBuilder func mac<T>(_ transform: (Self) -> T) -> some View where T: View {
         if deviceType == .mac {
             transform(self)
@@ -59,7 +58,7 @@ internal extension View {
             self
         }
     }
-
+    
     @ViewBuilder func iPadOrMac<T>(_ transform: (Self) -> T) -> some View where T: View {
         if deviceType == .mac || deviceType == .ipad {
             transform(self)
