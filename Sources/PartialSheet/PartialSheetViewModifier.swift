@@ -128,7 +128,9 @@ struct PartialSheet: ViewModifier {
                         notifier.removeObserver(self)
                     }
                     .onPreferenceChange(PresenterPreferenceKey.self, perform: { (prefData) in
-                        self.presenterContentRect = prefData.first?.bounds ?? .zero
+                        DispatchQueue.main.async {
+                            self.presenterContentRect = prefData.first?.bounds ?? .zero
+                        }
                     })
             }
                 // if the device type is not an iPhone,
@@ -234,8 +236,10 @@ extension PartialSheet {
                     Spacer()
                 }
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
-                    withAnimation(manager.defaultAnimation) {
-                        self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    DispatchQueue.main.async {
+                        withAnimation(manager.defaultAnimation) {
+                            self.sheetContentRect = prefData.first?.bounds ?? .zero
+                        }
                     }
                 })
                 .frame(width: UIScreen.main.bounds.width)
