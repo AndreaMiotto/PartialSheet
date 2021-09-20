@@ -104,6 +104,7 @@ public struct PartialSheetStyle {
         self.coverColor = coverColor
         self.cornerRadius = cornerRadius
         self.minTopDistance = minTopDistance
+        self.blurEffectStyle = blurEffectStyle
     }
 }
 
