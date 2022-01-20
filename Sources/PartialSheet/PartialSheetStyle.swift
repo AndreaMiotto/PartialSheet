@@ -46,6 +46,8 @@ public struct PartialSheetStyle {
     /// Minimum distance between the top of the sheet and the top of the screen
     var minTopDistance: CGFloat
     
+    var enableDrag: Bool = true
+    
     /// Inits the style
     ///
     /// - Parameters:
@@ -63,7 +65,8 @@ public struct PartialSheetStyle {
                 coverColor: Color,
                 blurEffectStyle: UIBlurEffect.Style? = nil,
                 cornerRadius: CGFloat,
-                minTopDistance: CGFloat
+                minTopDistance: CGFloat,
+                enableDrag: Bool = true
     ) {
         self.init(
             background: background,
@@ -73,7 +76,8 @@ public struct PartialSheetStyle {
             coverColor: coverColor,
             blurEffectStyle: blurEffectStyle,
             cornerRadius: cornerRadius,
-            minTopDistance: minTopDistance
+            minTopDistance: minTopDistance,
+            enableDrag: enableDrag
         )
     }
   
@@ -95,7 +99,8 @@ public struct PartialSheetStyle {
                 coverColor: Color,
                 blurEffectStyle: UIBlurEffect.Style? = nil,
                 cornerRadius: CGFloat,
-                minTopDistance: CGFloat
+                minTopDistance: CGFloat,
+                enableDrag: Bool = true
     ) {
         self.background = background
         self.handlerBarStyle = handlerBarStyle
@@ -105,6 +110,7 @@ public struct PartialSheetStyle {
         self.cornerRadius = cornerRadius
         self.minTopDistance = minTopDistance
         self.blurEffectStyle = blurEffectStyle
+        self.enableDrag = enableDrag
     }
 }
 
@@ -126,7 +132,8 @@ extension PartialSheetStyle {
                                  coverColor: Color.black.opacity(0.4),
                                  blurEffectStyle: nil,
                                  cornerRadius: 10,
-                                 minTopDistance: 110
+                                 minTopDistance: 110,
+                                 enableDrag: true
         )
     }
 }
