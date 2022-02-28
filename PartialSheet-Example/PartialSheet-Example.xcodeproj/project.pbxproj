@@ -32,7 +32,6 @@
 		01D345CE27CA61D20061D4C7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		01D345CF27CA61D40061D4C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01D345D427CA61D40061D4C7 /* PartialSheet-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PartialSheet-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		01D345EE27CA62420061D4C7 /* PartialSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PartialSheet; path = ../PartialSheet; sourceTree = "<group>"; };
 		01D345F727CA64E30061D4C7 /* BlurredSheetExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurredSheetExample.swift; sourceTree = "<group>"; };
 		01D345F827CA64E30061D4C7 /* HandlerBarFreeExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlerBarFreeExample.swift; sourceTree = "<group>"; };
 		01D345F927CA64E40061D4C7 /* AnimationContentExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationContentExample.swift; sourceTree = "<group>"; };
@@ -42,6 +41,7 @@
 		01D345FD27CA64E40061D4C7 /* ListExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListExample.swift; sourceTree = "<group>"; };
 		01D345FE27CA64E40061D4C7 /* BaseExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseExample.swift; sourceTree = "<group>"; };
 		01D345FF27CA64E40061D4C7 /* PushNavigationExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNavigationExample.swift; sourceTree = "<group>"; };
+		01F64A5727CD89E8000D9AC0 /* PartialSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PartialSheet; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,8 +77,8 @@
 		01D345C727CA61D20061D4C7 = {
 			isa = PBXGroup;
 			children = (
+				01F64A5627CD89E8000D9AC0 /* Packages */,
 				01B5931F27CA985E00072948 /* PartialSheet-Example (iOS).entitlements */,
-				01D345EE27CA62420061D4C7 /* PartialSheet */,
 				01D345CC27CA61D20061D4C7 /* Shared */,
 				01D345D527CA61D40061D4C7 /* Products */,
 				01D345EF27CA63450061D4C7 /* Frameworks */,
@@ -109,6 +109,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		01F64A5627CD89E8000D9AC0 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				01F64A5727CD89E8000D9AC0 /* PartialSheet */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
