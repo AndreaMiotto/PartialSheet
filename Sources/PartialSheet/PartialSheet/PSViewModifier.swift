@@ -208,13 +208,9 @@ extension PartialSheet {
                                 if $0.y > 60 { dismissSheet() }
                             }
                         ) {
-                            VStack {
-                                sheetContent
-                                    .frame(height: height)
-                                Spacer()
-                            }
-
+                            sheetContent
                         }
+                        .frame(height: height)
                     } else {
                         VStack {
                             sheetContent
