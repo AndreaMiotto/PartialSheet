@@ -7,31 +7,32 @@
 //
 
 import SwiftUI
+import PartialSheet
 
 struct PushNavigationExample: View {
-    @EnvironmentObject var partialSheetManager : PartialSheetManager
-
+    @State private var isSheetPresented = false
     @State var showNextView: Bool = false
-
+    
     var body: some View {
         ZStack {
             NavigationLink(destination: Text("Destination View"), isActive: $showNextView, label: {EmptyView()})
-
-            Button(action: {
-                self.partialSheetManager.showPartialSheet {
-                    Button(action: {
-                        self.partialSheetManager.isPresented = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.33) {
-                            self.showNextView = true
-                        }
-                    }) {
-                        Text("Navigation Link")
-                    }
-                }
-            }) {
-                Text("Show Partial Sheet")
-            }
+            PSButton(
+                isPresenting: $isSheetPresented,
+                label: {
+                    Text("Show Partial Sheet")
+                })
         }
+        .partialSheet(isPresented: $isSheetPresented, content: {
+            Button(action: {
+                isSheetPresented = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.33) {
+                    self.showNextView = true
+                }
+            }, label: {
+                Text("Navigation Link")
+            })
+                .padding()
+        })
         .navigationBarTitle(Text("Push Navigation"))
     }
 }
@@ -41,8 +42,7 @@ struct PushNavigationExample_Previews: PreviewProvider {
         NavigationView {
             PushNavigationExample()
         }
-        .addPartialSheet()
+        .attachPartialSheetToRoot()
         .navigationViewStyle(StackNavigationViewStyle())
-        .environmentObject(PartialSheetManager())
     }
 }
