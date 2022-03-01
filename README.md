@@ -14,7 +14,6 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 
 **Version 3.0 has been released, there are a lot of breaking changes, make sure to read the guide before update!**
 
-
 ## Index
 
 - [Features](#features)
@@ -22,6 +21,7 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 - [Installation](#installation)
 - [How To Use](#how-to-use)
 - [Wiki - Full Guide](https://github.com/AndreaMiotto/PartialSheet/wiki)
+- [Version 2](#version-2)
 
 
 ## iPhone Preview
@@ -38,8 +38,8 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 ## Features
 
 #### Availables
-- \[x]  Slidable and dismissable with drag gesture
-- \[x]  Variable height based on his content
+- \[x] Slidable and dismissable with drag gesture
+- \[x] Variable height based on his content
 - \[x] Allow scrollable cntents
 - \[x] Compatible with pickers
 - \[x] Customizable colors
@@ -50,13 +50,13 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 - \[x] Mac compatibility
 
 #### Nice to have
-At the moment with developed all the most requested features, feel free to open an issue if you feel something is missing.
+At the moment we developed all the most requested features, feel free to open an issue if you feel something is missing.
 
 ## Version 3
 The new version brings a lot of breaking changes and a lot of improvments:
 - A more **SwiftUI way** to call the PartialSheet.
-- Add support **scrollable content**.
-- Add support the **Material** effect.
+- Add support to **scrollable content**.
+- Add support to **Material** effect.
 - A new **Button** to avoid the *rage tapping*.
 - More Support for the pickers.
 
@@ -84,10 +84,7 @@ To use the **Partial Sheet** you need to follow just two simple steps
 
 1. Attach the **Partial Sheet** instance to your Root View in you
 ```Swift
- let window = UIWindow(windowScene: windowScene)
- window.rootViewController = UIHostingController(
- rootView: contentView.attachPartialSheetToRoot()
- )
+rootView.attachPartialSheetToRoot()
 ```
 2. Then in any view on the hierarchy you can use:
 
@@ -110,3 +107,6 @@ PSButton(
 Remember to always add `import PartialSheet` in every file you want to use the PartialSheet.
 
 In the **Example** directory you can find more runnable examples with more complex structures.
+
+## Version 2
+The new version brings a lot of new features and improvements, but for now I had to drop the compatibility with iOS systems before the 15.0. If you need you can still use the version 2 pointing to the correct tag in the Package Manager.
