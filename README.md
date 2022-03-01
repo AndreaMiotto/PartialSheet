@@ -26,13 +26,15 @@ A custom SwiftUI modifier to present a Partial Modal Sheet based on his content 
 
 ## iPhone Preview
 
-<img src="https://user-images.githubusercontent.com/11211914/68700576-6c100580-0585-11ea-847b-99f0450311a4.gif" width="250"><img src="https://user-images.githubusercontent.com/11211914/68700574-6c100580-0585-11ea-9727-8a02ec36b118.gif" width="250">
+| Dynamic Height | Scrollable Content | Pickers Compatible
+--|--|--
+<video src="https://user-images.githubusercontent.com/11211914/156180442-0f17b29a-8a7f-4655-a74b-9ef8c58f5b7c.mov">|<video src="https://user-images.githubusercontent.com/11211914/156180453-eaebb944-14d9-4994-b4d2-2adb45e1e136.mov">|<video src="https://user-images.githubusercontent.com/11211914/156180464-52cf9a21-e892-4e1e-bfde-a36d3324977b.mov">
 
-## iPad Preview
-<img src="https://user-images.githubusercontent.com/11211914/79673521-af019380-821d-11ea-82f5-49d75e83d7c0.png" width="500">
-
-## Mac Preview
-<img src="https://user-images.githubusercontent.com/11211914/79673482-7eb9f500-821d-11ea-93e0-60fc32e554ee.png" width="600">
+## iPad & Mac Preview
+  
+iPad Version | Mac Version
+--|--
+<img src="https://user-images.githubusercontent.com/11211914/79673521-af019380-821d-11ea-82f5-49d75e83d7c0.png" width="500"> | <img src="https://user-images.githubusercontent.com/11211914/79673482-7eb9f500-821d-11ea-93e0-60fc32e554ee.png" width="600">
 
 
 ## Features
