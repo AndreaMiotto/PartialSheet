@@ -43,7 +43,7 @@ struct PartialSheet: ViewModifier {
     
     /// The he point for the bottom anchor
     var bottomAnchor: CGFloat {
-        return UIScreen.main.bounds.height + 5
+        return UIScreen.main.bounds.height
     }
     
     /// The height of the handle bar section
@@ -60,7 +60,6 @@ struct PartialSheet: ViewModifier {
     /// Calculates the sheets y position
     private var sheetPosition: CGFloat {
         if self.manager.isPresented {
-            // 20.0 = To make sure we dont go under statusbar on screens without safe area inset
             let topInset = safeAreaInsets.top
             let position = self.topAnchor + self.dragOffset - self.keyboardOffset
             
@@ -201,16 +200,19 @@ extension PartialSheet {
                     }
 
                     if case let PSType.scrollView(height, showsIndicators) = manager.type {
-                        PSScrollVIew(
-                            axes: [.vertical],
-                            showsIndicators: showsIndicators,
-                            offsetChanged: {
-                                if $0.y > 60 { dismissSheet() }
+                        VStack {
+                            PSScrollVIew(
+                                axes: [.vertical],
+                                showsIndicators: showsIndicators,
+                                offsetChanged: {
+                                    if $0.y > 60 { dismissSheet() }
+                                }
+                            ) {
+                                sheetContent
                             }
-                        ) {
-                            sheetContent
+                            .frame(height: height)
+                            Spacer()
                         }
-                        .frame(height: height)
                     } else {
                         VStack {
                             sheetContent
@@ -220,8 +222,23 @@ extension PartialSheet {
                 }
                 .onFrameDidChange { prefData in
                     let animation = prefData.first?.bounds != nil ? self.manager.slideAnimation.slideIn : self.manager.slideAnimation.slideOut
+
+                    guard let bounds = prefData.first?.bounds else {
+                        withAnimation(animation) {
+                            self.sheetContentRect = .zero
+                        }
+                        return
+                    }
+
+                    let sheetContentRect: CGRect
+                    switch manager.type {
+                    case .scrollView(height: let height, showsIndicators: _):
+                        sheetContentRect = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: height)
+                    case .dynamic:
+                        sheetContentRect = bounds
+                    }
                     withAnimation(animation) {
-                        self.sheetContentRect = prefData.first?.bounds ?? .zero
+                        self.sheetContentRect = sheetContentRect
                     }
                 }
                 .frame(width: UIScreen.main.bounds.width)
