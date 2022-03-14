@@ -17,15 +17,30 @@ import SwiftUI
  ```
  */
 class PSManager: ObservableObject {
+
+    /// Delayed work associated with a dismissal animation
+    ///
+    /// - Note: this work is cancelled if it isn't executed
+    /// before the partial sheet is presented again
+    private var pendingDismissal: DispatchWorkItem? {
+        didSet {
+            oldValue?.cancel()
+        }
+    }
     
     /// Published var to present or hide the partial sheet
     @Published var isPresented: Bool = false {
         didSet {
             if !isPresented {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
+                let pendingDismissal = DispatchWorkItem { [weak self] in
                     self?.content = EmptyView().eraseToAnyView()
                     self?.onDismiss = nil
+                    self?.pendingDismissal = nil
                 }
+                self.pendingDismissal = pendingDismissal
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35, execute: pendingDismissal)
+            } else {
+                pendingDismissal = nil
             }
         }
     }
