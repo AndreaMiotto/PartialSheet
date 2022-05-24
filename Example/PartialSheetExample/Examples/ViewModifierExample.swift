@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct ViewModifierExample: View {
+    @EnvironmentObject var partialSheetManager: PartialSheetManager
+
     @State var isSheetShown = false
     @State var viewContent = "Initial content"
     var body: some View {
@@ -27,6 +29,12 @@ struct ViewModifierExample: View {
         .partialSheet(isPresented: $isSheetShown) {
             ViewModifierView(content: self.$viewContent)
                 .padding(.vertical, 50)
+        }
+        .onAppear {
+            partialSheetManager.isDraggable = false
+        }
+        .onDisappear {
+            partialSheetManager.isDraggable = true
         }
     }
 }

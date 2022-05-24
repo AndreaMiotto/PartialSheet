@@ -34,6 +34,8 @@ public class PartialSheetManager: ObservableObject {
             }
         }
     }
+    /// Published var to activate or not drag gesture on the partial sheet
+    @Published var isDraggable: Bool = true
     /// The content of the sheet
     @Published private(set) var content: AnyView
     /// the onDismiss code runned when the partial sheet is closed
