@@ -13,6 +13,7 @@ public struct PSIphoneStyle {
     public enum PSIphoneBackground {
         case solid(Color)
         case blur(Material)
+        case gradient(LinearGradient)
     }
 
     /// Handle Bar types
