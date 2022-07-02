@@ -48,6 +48,11 @@ class PSManager: ObservableObject {
      You can restore the default one calling **restoreDefaultSlideAnimation**
      **/
     var slideAnimation: PSSlideAnimation
+    
+    /**
+     You only need to set false when you  DatePicker with .datePickerStyle(.graphical)
+     */
+    var dragGestureSupported: Bool = true
 
     
     init() {
@@ -63,9 +68,11 @@ class PSManager: ObservableObject {
                                iPhoneStyle: PSIphoneStyle,
                                iPadMacStyle: PSIpadMacStyle,
                                slideAnimation: PSSlideAnimation?,
+                               dragGestureSupported: Bool,
                                content: (() -> T),
                                onDismiss: @escaping (() -> Void)) where T: View {
         self.content = AnyView(content())
+        self.dragGestureSupported = dragGestureSupported
         self.type = type
         self.iPhoneStyle = iPhoneStyle
         self.iPadMacStyle = iPadMacStyle

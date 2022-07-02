@@ -24,6 +24,7 @@ struct DatePickerExample: View {
             Spacer()
         }
         .partialSheet(isPresented: $isSheetPresented,
+                      dragGestureSupported: false,
                       content: DatePickerSheetView.init)
         .navigationBarTitle("Date Picker Example")
         .navigationViewStyle(StackNavigationViewStyle())
@@ -48,6 +49,7 @@ struct DatePickerSheetView: View {
             VStack {
                 Text("Settings Panel").font(.headline)
                 DatePicker("Date", selection: $date)
+                    .datePickerStyle(.graphical)
             }
             .padding()
             .frame(height: 270)
