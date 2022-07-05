@@ -25,6 +25,9 @@ struct PartialSheet: ViewModifier {
     
     /// The offset for the drag gesture
     @State var dragOffset: CGFloat = 0
+    
+    /// The flag for DragGesture is active
+    @GestureState var isDraging: Bool = false
 
     /// The rect containing the presenter
     @State private var presenterContentRect: CGRect = .zero
@@ -248,6 +251,14 @@ extension PartialSheet {
                 .offset(y: self.sheetPosition)
                 .onTapGesture {}
                 .gesture(drag)
+                .onChange(of: isDraging) { newValue in
+                    guard !isDraging else {
+                        return
+                    }
+                    withAnimation(manager.slideAnimation.defaultSlideAnimation) {
+                        dragOffset = 0
+                    }
+                }
             }
         }
     }

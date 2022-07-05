@@ -10,10 +10,13 @@ import SwiftUI
 
 extension PartialSheet {
     /// Create a new **DragGesture** with *updating* and *onEndend* func
-    func dragGesture() -> _EndedGesture<_ChangedGesture<DragGesture>> {
+    func dragGesture() -> some Gesture {
         DragGesture(minimumDistance: 0.1, coordinateSpace: .local)
             .onChanged(onDragChanged)
             .onEnded(onDragEnded)
+            .updating($isDraging) { value, isDraging, translation in
+                isDraging = true
+            }
     }
     
     private func onDragChanged(drag: DragGesture.Value) {
@@ -36,6 +39,9 @@ extension PartialSheet {
     
     /// The method called when the drag ends. It moves the sheet in the correct position based on the last drag gesture
     private func onDragEnded(drag: DragGesture.Value) {
+        guard manager.isPresented else {
+            return
+        }
         /// The drag direction
         let verticalDirection = drag.predictedEndLocation.y - drag.location.y
         
