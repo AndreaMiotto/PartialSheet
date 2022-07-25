@@ -9,7 +9,7 @@ import SwiftUI
 
 /**
  Add a Tracker on the frame of the current View.
- On every cnages the *onChange* callback will be triggered.
+ On every change the *onChange* callback will be triggered.
  */
 struct AddFrameTracker: ViewModifier {
     /// Preference Key for the Sheet Presener
