@@ -246,7 +246,6 @@ extension PartialSheet {
                 .cornerRadius(iPhoneStyle.cornerRadius)
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
                 .offset(y: self.sheetPosition)
-                .onTapGesture {}
                 .gesture(drag)
             }
         }
