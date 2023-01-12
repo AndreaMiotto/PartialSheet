@@ -61,7 +61,7 @@ struct PartialSheet: ViewModifier {
     private var sheetPosition: CGFloat {
         if self.manager.isPresented {
             let topInset = safeAreaInsets.top
-            let position = self.topAnchor + self.dragOffset - self.keyboardOffset
+            let position = self.topAnchor + self.dragOffset
             
             if position < topInset {
                 return topInset
