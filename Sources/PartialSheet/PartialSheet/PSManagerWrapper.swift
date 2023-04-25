@@ -17,6 +17,7 @@ struct PSManagerWrapper<Parent: View, SheetContent: View>: View {
     let iPhoneStyle: PSIphoneStyle
     let iPadMacStyle: PSIpadMacStyle
     let slideAnimation: PSSlideAnimation?
+    let dissmissOnTap: Bool
     let content: () -> SheetContent
     let parent: Parent
     
@@ -33,6 +34,7 @@ struct PSManagerWrapper<Parent: View, SheetContent: View>: View {
             iPadMacStyle: iPadMacStyle,
             slideAnimation: slideAnimation,
             content: content,
+            dismissOnTap: dissmissOnTap,
             onDismiss: { self.isPresented = false}
         )
     }

@@ -180,7 +180,7 @@ extension PartialSheet {
                     }
                 }
                 .edgesIgnoringSafeArea(.vertical)
-               // .onTapGesture { dismissSheet() }
+                .onTapGesture { if manager.dismissOnTap { dismissSheet() } }
             }
             
             // The SHEET VIEW

@@ -49,6 +49,8 @@ class PSManager: ObservableObject {
      **/
     var slideAnimation: PSSlideAnimation
 
+    /// DismissOnTap, By default it will be true. Configure from modifier
+    var dismissOnTap: Bool = true
     
     init() {
         content = EmptyView().eraseToAnyView()
@@ -64,6 +66,7 @@ class PSManager: ObservableObject {
                                iPadMacStyle: PSIpadMacStyle,
                                slideAnimation: PSSlideAnimation?,
                                content: (() -> T),
+                               dismissOnTap: Bool,
                                onDismiss: @escaping (() -> Void)) where T: View {
         self.content = AnyView(content())
         self.type = type
@@ -71,6 +74,7 @@ class PSManager: ObservableObject {
         self.iPadMacStyle = iPadMacStyle
         self.onDismiss = onDismiss
         self.slideAnimation = slideAnimation ?? PSSlideAnimation()
+        self.dismissOnTap = dismissOnTap
         withAnimation(isPresented ? self.slideAnimation.slideIn : self.slideAnimation.slideOut) {
             self.isPresented = isPresented
         }
