@@ -24,6 +24,9 @@ struct PSManagerWrapper<Parent: View, SheetContent: View>: View {
     var body: some View {
         parent
             .onChange(of: isPresented, perform: {_ in updateContent() })
+            .onDisappear {
+                self.isPresented = false
+            }
     }
     
     private func updateContent() {
