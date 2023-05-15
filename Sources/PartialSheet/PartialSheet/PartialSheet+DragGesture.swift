@@ -41,11 +41,14 @@ extension PartialSheet {
         
         // Set the correct anchor point based on the vertical direction of the drag
         if verticalDirection > 1 {
-            DispatchQueue.main.async {
-                withAnimation(manager.slideAnimation.defaultSlideAnimation) {
-                    dragOffset = 0
-                    self.manager.isPresented = false
-                    self.manager.onDismiss?()
+            // Drag to dismiss only when dismissOnTap is enabled
+            if self.manager.dismissOnTap {
+                DispatchQueue.main.async {
+                    withAnimation(manager.slideAnimation.defaultSlideAnimation) {
+                        dragOffset = 0
+                        self.manager.isPresented = false
+                        self.manager.onDismiss?()
+                    }
                 }
             }
         } else if verticalDirection < 0 {
@@ -65,12 +68,14 @@ extension PartialSheet {
             } else {
                 closestPosition = bottomAnchor
             }
-            
-            withAnimation(manager.slideAnimation.defaultSlideAnimation) {
-                dragOffset = 0
-                self.manager.isPresented = (closestPosition == topAnchor)
-                if !manager.isPresented {
-                    manager.onDismiss?()
+            // Drag to dismiss only when dismissOnTap is enabled
+            if self.manager.dismissOnTap {
+                withAnimation(manager.slideAnimation.defaultSlideAnimation) {
+                    dragOffset = 0
+                    self.manager.isPresented = (closestPosition == topAnchor)
+                    if !manager.isPresented {
+                        manager.onDismiss?()
+                    }
                 }
             }
         }
