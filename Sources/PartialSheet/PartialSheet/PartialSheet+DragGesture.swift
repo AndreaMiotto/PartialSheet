@@ -52,9 +52,11 @@ extension PartialSheet {
                 }
             }
         } else if verticalDirection < 0 {
-            withAnimation(manager.slideAnimation.defaultSlideAnimation) {
-                dragOffset = 0
-                self.manager.isPresented = true
+            if self.manager.dismissOnTap {
+                withAnimation(manager.slideAnimation.defaultSlideAnimation) {
+                    dragOffset = 0
+                    self.manager.isPresented = true
+                }
             }
         } else {
             /// The current sheet position
