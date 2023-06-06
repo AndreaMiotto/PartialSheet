@@ -47,6 +47,7 @@ public extension View {
                                      iPhoneStyle: PSIphoneStyle = .defaultStyle(),
                                      iPadMacStyle: PSIpadMacStyle = .defaultStyle(),
                                      slideAnimation: PSSlideAnimation? = nil,
+                                     onDismiss: (() -> Void)? = nil,
                                      @ViewBuilder content: @escaping () -> Content) -> some View {
         PSManagerWrapper(
             isPresented: isPresented,
@@ -55,7 +56,8 @@ public extension View {
             iPadMacStyle: iPadMacStyle,
             slideAnimation: slideAnimation,
             content: content,
-            parent: self
+            parent: self,
+            onDismiss: onDismiss
         )
     }
 }
