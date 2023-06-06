@@ -10,10 +10,13 @@ import SwiftUI
 
 extension PartialSheet {
     /// Create a new **DragGesture** with *updating* and *onEndend* func
-    func dragGesture() -> _EndedGesture<_ChangedGesture<DragGesture>> {
+    func dragGesture() -> GestureStateGesture<_EndedGesture<_ChangedGesture<DragGesture>>, Bool> {
         DragGesture(minimumDistance: 0.1, coordinateSpace: .local)
             .onChanged(onDragChanged)
             .onEnded(onDragEnded)
+            .updating($isDetectingDrag) { value, state, transaction in
+                state = true
+            }
     }
     
     private func onDragChanged(drag: DragGesture.Value) {
