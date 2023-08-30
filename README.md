@@ -42,7 +42,7 @@ iPad Version | Mac Version
 #### Availables
 - \[x] Slidable and dismissable with drag gesture
 - \[x] Variable height based on his content
-- \[x] Allow scrollable cntents
+- \[x] Allow scrollable contents
 - \[x] Compatible with pickers
 - \[x] Customizable colors
 - \[x] Keyboard compatibility
