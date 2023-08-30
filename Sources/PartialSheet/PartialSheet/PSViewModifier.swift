@@ -80,11 +80,12 @@ struct PartialSheet: ViewModifier {
         switch deviceType {
         case .iphone:
             switch iPhoneStyle.background {
-            case .solid(let color): Rectangle().fill(color)
+            case .solid(let color): color
             case .blur(let effect): Rectangle().fill(effect)
+            case .gradient(let gradient): gradient
             }
         default:
-            Rectangle().fill(iPadMacStyle.backgroundColor)
+            iPadMacStyle.backgroundColor
         }
     }
     
