@@ -57,6 +57,10 @@ struct ContentView: View {
                             label: {Text("Blurred Example")
                             })
                         NavigationLink(
+                            destination: GradientExample(),
+                            label: {Text("Gradient Example")
+                            })
+                        NavigationLink(
                             destination: AnimationContentExample(),
                             label: {Text("AnimationContent Example")
                             })

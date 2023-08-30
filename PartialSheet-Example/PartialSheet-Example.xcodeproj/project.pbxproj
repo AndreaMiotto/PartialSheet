@@ -22,6 +22,7 @@
 		01D3460C27CA64E40061D4C7 /* ListExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D345FD27CA64E40061D4C7 /* ListExample.swift */; };
 		01D3460E27CA64E40061D4C7 /* BaseExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D345FE27CA64E40061D4C7 /* BaseExample.swift */; };
 		01D3461027CA64E40061D4C7 /* PushNavigationExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D345FF27CA64E40061D4C7 /* PushNavigationExample.swift */; };
+		65AE69B82A9F7A6600DDA4F1 /* GradientSheetExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AE69B72A9F7A6500DDA4F1 /* GradientSheetExample.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		01D345FE27CA64E40061D4C7 /* BaseExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseExample.swift; sourceTree = "<group>"; };
 		01D345FF27CA64E40061D4C7 /* PushNavigationExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNavigationExample.swift; sourceTree = "<group>"; };
 		01F64A5727CD89E8000D9AC0 /* PartialSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PartialSheet; path = ..; sourceTree = "<group>"; };
+		65AE69B72A9F7A6500DDA4F1 /* GradientSheetExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientSheetExample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				01B5932327CD29E300072948 /* CustonAnimationExample.swift */,
 				01B5932027CA9E6A00072948 /* ScrollViewExample.swift */,
 				01D345F727CA64E30061D4C7 /* BlurredSheetExample.swift */,
+				65AE69B72A9F7A6500DDA4F1 /* GradientSheetExample.swift */,
 				01D345FC27CA64E40061D4C7 /* DatePickerExample.swift */,
 				01D345F827CA64E30061D4C7 /* HandlerBarFreeExample.swift */,
 				01D345FD27CA64E40061D4C7 /* ListExample.swift */,
@@ -201,6 +204,7 @@
 				01D3460827CA64E40061D4C7 /* TextfieldExample.swift in Sources */,
 				01D3460C27CA64E40061D4C7 /* ListExample.swift in Sources */,
 				01D345DF27CA61D40061D4C7 /* ContentView.swift in Sources */,
+				65AE69B82A9F7A6600DDA4F1 /* GradientSheetExample.swift in Sources */,
 				01D345DD27CA61D40061D4C7 /* PartialSheet_ExampleApp.swift in Sources */,
 				01D3460427CA64E40061D4C7 /* AnimationContentExample.swift in Sources */,
 				01D3460227CA64E40061D4C7 /* HandlerBarFreeExample.swift in Sources */,
