@@ -23,8 +23,13 @@ struct BasicExample: View {
                 .padding()
             Spacer()
         }
-        .partialSheet(isPresented: $isSheetPresented,
-                      content: SheetView.init)
+        .partialSheet(
+            isPresented: $isSheetPresented,
+            onDismiss: {
+                print("On Dismiss Called")
+            },
+            content: SheetView.init
+        )
         .navigationBarTitle("Basic Example")
         .navigationViewStyle(StackNavigationViewStyle())
     }

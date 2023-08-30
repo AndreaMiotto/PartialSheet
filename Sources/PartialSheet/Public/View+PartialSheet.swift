@@ -40,6 +40,7 @@ public extension View {
      - parameter iPhoneStyle: The Partial Sheet's style for iPhone
      - parameter iPadMacStyle: The Partial Sheet's style for iPad and Mac
      - parameter slideAnimation: The custon animation for the slide in / out of the  Partial Sheet
+     - parameter onDismiss: Allows presenter to call function when Partial Sheet is dismissed. Defaults to nil.
      - parameter content: The content of the Partial Sheet.
      */
     func partialSheet<Content: View>(isPresented: Binding<Bool>,
@@ -47,6 +48,7 @@ public extension View {
                                      iPhoneStyle: PSIphoneStyle = .defaultStyle(),
                                      iPadMacStyle: PSIpadMacStyle = .defaultStyle(),
                                      slideAnimation: PSSlideAnimation? = nil,
+                                     onDismiss: (() -> Void)? = nil,
                                      @ViewBuilder content: @escaping () -> Content) -> some View {
         PSManagerWrapper(
             isPresented: isPresented,
@@ -55,7 +57,8 @@ public extension View {
             iPadMacStyle: iPadMacStyle,
             slideAnimation: slideAnimation,
             content: content,
-            parent: self
+            parent: self,
+            onDismiss: onDismiss
         )
     }
 }
