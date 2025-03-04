@@ -27,8 +27,17 @@ public extension View {
      }
      ```
      */
-    func attachPartialSheetToRoot() -> some View {
-        let sheetManager: PSManager = PSManager()
+    func attachPartialSheetToRoot(manager: PSManager? = nil) -> some View {
+        let manager = {
+           if let manager {
+               return manager
+           } else {
+               return PSManager()
+           }
+        }() 
+        
+        let sheetManager: PSManager = manager
+        
         return self
             .modifier(PartialSheet())
             .environmentObject(sheetManager)

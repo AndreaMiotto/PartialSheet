@@ -16,7 +16,7 @@ import SwiftUI
  contentView.environmentObject(sheetManager)
  ```
  */
-class PSManager: ObservableObject {
+public class PSManager: ObservableObject {
     
     /// Published var to present or hide the partial sheet
     @Published var isPresented: Bool = false {
@@ -50,7 +50,7 @@ class PSManager: ObservableObject {
     var slideAnimation: PSSlideAnimation
 
     
-    init() {
+    public init() {
         content = EmptyView().eraseToAnyView()
         slideAnimation = PSSlideAnimation()
     }
