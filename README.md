@@ -10,6 +10,8 @@
 
 # PartialSheet
 
+> Local iOS 27 preparation branch: see [adaptation notes and installation](Documentation/iOS-27.md). Built with Xcode 26.4.1 / iOS 26.4 SDK, including Swift 6 strict concurrency. iOS 27 SDK/runtime validation is still pending.
+
 **Deprecated: The owner has no more time to maantain this project.**
 
 A custom SwiftUI modifier to present a Partial Modal Sheet based on his content size.

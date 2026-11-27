@@ -28,10 +28,7 @@ public extension View {
      ```
      */
     func attachPartialSheetToRoot() -> some View {
-        let sheetManager: PSManager = PSManager()
-        return self
-            .modifier(PartialSheet())
-            .environmentObject(sheetManager)
+        modifier(PartialSheetRoot())
     }
 
     /**
@@ -60,5 +57,15 @@ public extension View {
             parent: self,
             onDismiss: onDismiss
         )
+    }
+}
+
+/// Own the manager for the lifetime of this root's SwiftUI identity.
+@MainActor
+private struct PartialSheetRoot: ViewModifier {
+    @StateObject private var manager = PSManager()
+
+    func body(content: Content) -> some View {
+        content.modifier(PartialSheet()).environmentObject(manager)
     }
 }

@@ -23,6 +23,7 @@ let package = Package(
             name: "PartialSheet",
             dependencies: [],
             path: "Sources"
-        )
+        ),
+        .testTarget(name: "PartialSheetTests", dependencies: ["PartialSheet"])
     ]
 )

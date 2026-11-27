@@ -17,7 +17,7 @@ struct AddFrameTracker: ViewModifier {
         static func reduce(value: inout [PreferenceData], nextValue: () -> [PreferenceData]) {
             value.append(contentsOf: nextValue())
         }
-        static var defaultValue: [PreferenceData] = []
+        static let defaultValue: [PreferenceData] = []
     }
 
     /// Preference Key for the Sheet Content
@@ -25,7 +25,7 @@ struct AddFrameTracker: ViewModifier {
         static func reduce(value: inout [PreferenceData], nextValue: () -> [PreferenceData]) {
             value.append(contentsOf: nextValue())
         }
-        static var defaultValue: [PreferenceData] = []
+        static let defaultValue: [PreferenceData] = []
     }
 
     /// Data Stored in the Preferences

@@ -12,6 +12,7 @@ import SwiftUI
 struct PSManagerWrapper<Parent: View, SheetContent: View>: View {
     @EnvironmentObject var partialSheetManager: PSManager
     
+    @State private var owner = UUID()
     @Binding var isPresented: Bool
     let type: PSType
     let iPhoneStyle: PSIphoneStyle
@@ -23,11 +24,16 @@ struct PSManagerWrapper<Parent: View, SheetContent: View>: View {
     
     var body: some View {
         parent
+            .onAppear { if isPresented { updateContent() } }
+            .onDisappear {
+                if partialSheetManager.owner == owner { partialSheetManager.dismiss() }
+            }
             .onChange(of: isPresented, perform: {_ in updateContent() })
     }
     
     private func updateContent() {
         partialSheetManager.updatePartialSheet(
+            owner: owner,
             isPresented: isPresented,
             type: type,
             iPhoneStyle: iPhoneStyle,

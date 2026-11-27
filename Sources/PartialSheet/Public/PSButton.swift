@@ -21,7 +21,7 @@ It simply toggle the enabled status of the button for few time. You can reproduc
 public struct PSButton<Content: View>: View {
     @Binding var isPresenting: Bool
     var label: () -> Content
-    var acion: (() -> Void)?
+    var action: (() -> Void)?
     @State private var buttonDisabled: Bool = false
 
     public init(
@@ -30,10 +30,12 @@ public struct PSButton<Content: View>: View {
         label: @escaping () -> Content) {
             self._isPresenting = isPresenting
             self.label = label
+            self.action = action
         }
 
     public var body: some View {
         Button {
+            action?()
             toggleButton()
             isPresenting.toggle()
         } label: {

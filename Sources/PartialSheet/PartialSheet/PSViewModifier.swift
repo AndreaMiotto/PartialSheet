@@ -1,271 +1,122 @@
-//
-//  PSViewModifier.swift
-//  PartialModal
-//
-//  Created by Miotto Andrea on 09/11/2019.
-//  Copyright © 2019 Miotto Andrea. All rights reserved.
-//
-
 import SwiftUI
-import Combine
 
-/// This is the modifier for the Partial Sheet
+@MainActor
 struct PartialSheet: ViewModifier {
-    
-    // MARK: - Private Properties
-    
     @EnvironmentObject var manager: PSManager
-    @Environment(\.safeAreaInsets) var safeAreaInsets
-    
-    /// The rect containing the sheet content
-    @State var sheetContentRect: CGRect = .zero
-    
-    /// The offset for keyboard height
-    @State var keyboardOffset: CGFloat = 0
-    
-    /// The offset for the drag gesture
-    @State var dragOffset: CGFloat = 0
-    
-    @GestureState var isDetectingDrag: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @GestureState private var dragOffset: CGFloat = 0
 
-    /// The rect containing the presenter
-    @State private var presenterContentRect: CGRect = .zero
-    
-    /// The point for the top anchor
-    var topAnchor: CGFloat {
-        let topSafeArea =  safeAreaInsets.top
-        let calculatedTop =
-        presenterContentRect.height +
-        topSafeArea -
-        sheetContentRect.height -
-        handleSectionHeight
-        
-        return calculatedTop
-    }
-    
-    /// The he point for the bottom anchor
-    var bottomAnchor: CGFloat {
-        return UIScreen.main.bounds.height
-    }
-    
-    /// The height of the handle bar section
-    var handleSectionHeight: CGFloat {
-        switch iPhoneStyle.handleBarStyle {
-        case .solid: return 40
-        case .none: return 0
-        }
+    private var handleHeight: CGFloat {
+        if case .solid = manager.iPhoneStyle.handleBarStyle { return 40 }
+        return 0
     }
 
-    private var iPhoneStyle: PSIphoneStyle { manager.iPhoneStyle }
-    private var iPadMacStyle: PSIpadMacStyle { manager.iPadMacStyle }
-    
-    /// Calculates the sheets y position
-    private var sheetPosition: CGFloat {
-        if self.manager.isPresented {
-            let topInset = safeAreaInsets.top
-            let position = self.topAnchor + self.dragOffset
-            
-            if position < topInset {
-                return topInset
-            }
-            
-            return position
-        } else {
-            return self.bottomAnchor - self.dragOffset
-        }
-    }
-    
-    /// Background of sheet
-    @ViewBuilder private var background: some View {
-        switch deviceType {
-        case .iphone:
-            switch iPhoneStyle.background {
-            case .solid(let color): color
-            case .blur(let effect): Rectangle().fill(effect)
-            case .gradient(let gradient): gradient
-            }
-        default:
-            iPadMacStyle.backgroundColor
-        }
-    }
-    
-    // MARK: - Content Builders
-    
     func body(content: Content) -> some View {
-        ZStack {
+        if deviceType == .iphone {
             content
-            // if the device type is an iPhone
-                .iPhone {
-                    $0
-                        .trackFrame()
-                        .onAppear {
-                            addKeyboardNotifier()
-                        }
-                        .onDisappear {
-                            removeKeyboardNotifier()
-                        }
-                        .onFrameDidChange { prefData in
-                            withAnimation {
-                                self.presenterContentRect = prefData.first?.bounds ?? .zero
+                .accessibilityHidden(manager.isPresented && hasCover)
+                .overlay {
+                    // Uses this presenter's bounds and SwiftUI keyboard avoidance.
+                    // No global screen, key window, or keyboard notifications.
+                    GeometryReader { geometry in
+                        ZStack(alignment: .bottom) {
+                            if manager.isPresented {
+                                cover
+                                sheet(availableHeight: geometry.size.height)
+                                    .background {
+                                        background
+                                            .clipShape(RoundedRectangle(cornerRadius: manager.iPhoneStyle.cornerRadius))
+                                            .ignoresSafeArea(.container, edges: .bottom)
+                                    }
+                                    .shadow(color: .black.opacity(0.13), radius: 10)
+                                    .offset(y: max(0, dragOffset))
+                                    .transition(reduceMotion ? .opacity : .move(edge: .bottom))
+                                    .accessibilityAddTraits(.isModal)
+                                    .accessibilityAction(.escape) { manager.dismiss() }
                             }
                         }
-                }
-            // if the device type is not an iPhone,
-            // display the sheet content as a normal sheet
-                .iPadOrMac {
-                    $0
-                        .sheet(isPresented: $manager.isPresented, onDismiss: {
-                            self.manager.onDismiss?()
-                        }, content: {
-                            self.iPadAndMacSheet()
-                        })
-                }
-            // if the device type is an iPhone,
-            // display the sheet content as a draggableSheet
-            if deviceType == .iphone {
-                iPhoneSheet()
-                    .edgesIgnoringSafeArea(.vertical)
-            }
-        }
-    }
-}
-
-//MARK: - Platfomr Specific Sheet Builders
-extension PartialSheet {
-    //MARK: - Mac and iPad Sheet Builder
-    
-    /// This is the builder for the sheet content for iPad and Mac devices only
-    private func iPadAndMacSheet() -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            switch iPadMacStyle.closeButtonStyle {
-            case .icon(image: let image, color: let color):
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        self.manager.isPresented = false
-                    }, label: {
-                        image
-                            .foregroundColor(color)
-                    })
-                }
-                .padding()
-            case .none:
-                EmptyView()
-            }
-            self.manager.content
-            Spacer()
-        }.background(self.background)
-    }
-    
-    //MARK: - iPhone Sheet Builder
-    
-    /// This is the builder for the sheet content for iPhone devices only
-    private func iPhoneSheet()-> some View {
-        // Build the drag gesture
-        let drag = dragGesture()
-
-        // content
-        let sheetContent = self.manager.content
-            .trackFrame()
-        
-        return ZStack {
-            
-            //MARK: - iPhone Cover View
-            
-            if manager.isPresented {
-                Group {
-                    switch iPhoneStyle.cover {
-                    case .enabled(let color):
-                        Rectangle()
-                            .foregroundColor(color)
-                    case .disabled:
-                        EmptyView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     }
                 }
-                .edgesIgnoringSafeArea(.vertical)
-                .onTapGesture { dismissSheet() }
-            }
-            
-            // The SHEET VIEW
-            Group {
-                VStack(spacing: 0) {
-                    switch iPhoneStyle.handleBarStyle {
-                    case .solid(let handleBarColor):
-                        VStack {
+        } else {
+            content.sheet(isPresented: $manager.isPresented) {
+                VStack(alignment: .leading, spacing: 0) {
+                    if case let .icon(image, color) = manager.iPadMacStyle.closeButtonStyle {
+                        HStack {
                             Spacer()
-                            RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
-                                .frame(width: 40, height: 5)
-                                .foregroundColor(handleBarColor)
-                            Spacer()
-                        }
-                        .frame(height: handleSectionHeight)
-                    case .none: EmptyView()
+                            Button { manager.dismiss() } label: { image.foregroundColor(color) }
+                                .accessibilityLabel(Text("Close"))
+                        }.padding()
                     }
-
-                    if case let PSType.scrollView(height, showsIndicators) = manager.type {
-                        VStack {
-                            PSScrollVIew(
-                                axes: [.vertical],
-                                showsIndicators: showsIndicators,
-                                offsetChanged: {
-                                    if $0.y > 60 { dismissSheet() }
-                                }
-                            ) {
-                                sheetContent
-                            }
-                            .frame(height: height)
-                            Spacer()
-                        }
-                    } else {
-                        VStack {
-                            sheetContent
-                            Spacer()
-                        }
-                    }
+                    manager.content
+                    Spacer(minLength: 0)
                 }
-                .onFrameDidChange { prefData in
-                    let animation = prefData.first?.bounds != nil ? self.manager.slideAnimation.slideIn : self.manager.slideAnimation.slideOut
-
-                    guard let bounds = prefData.first?.bounds else {
-                        withAnimation(animation) {
-                            self.sheetContentRect = .zero
-                        }
-                        return
-                    }
-
-                    let sheetContentRect: CGRect
-                    switch manager.type {
-                    case .scrollView(height: let height, showsIndicators: _):
-                        sheetContentRect = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: height)
-                    case .dynamic:
-                        sheetContentRect = bounds
-                    }
-                    withAnimation(animation) {
-                        self.sheetContentRect = sheetContentRect
-                    }
-                }
-                .frame(width: UIScreen.main.bounds.width)
-                .background(self.background)
-                .cornerRadius(iPhoneStyle.cornerRadius)
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                .offset(y: self.sheetPosition)
-                .gesture(drag)
-                .onChange(of: isDetectingDrag) { newValue in
-                    if newValue == false {
-                        withAnimation(manager.slideAnimation.defaultSlideAnimation) {
-                            dragOffset = 0
-                        }
-                    }
-                }
+                .background(manager.iPadMacStyle.backgroundColor)
             }
         }
     }
 
-    private func dismissSheet() {
-        withAnimation(manager.slideAnimation.slideOut) {
-            self.manager.isPresented = false
-            self.dismissKeyboard()
-            self.manager.onDismiss?()
+    private var hasCover: Bool {
+        if case .enabled = manager.iPhoneStyle.cover { return true }
+        return false
+    }
+
+    @ViewBuilder private var cover: some View {
+        if case .enabled(let color) = manager.iPhoneStyle.cover {
+            color
+                .contentShape(Rectangle())
+                .ignoresSafeArea(.container)
+                .onTapGesture { manager.dismiss() }
+                .accessibilityHidden(true)
         }
+    }
+
+    @ViewBuilder private var background: some View {
+        switch manager.iPhoneStyle.background {
+        case .solid(let color): color
+        case .blur(let material): Rectangle().fill(material)
+        case .gradient(let gradient): gradient
+        }
+    }
+
+    private func sheet(availableHeight: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            if case .solid(let color) = manager.iPhoneStyle.handleBarStyle {
+                RoundedRectangle(cornerRadius: 2.5)
+                    .fill(color)
+                    .frame(width: 40, height: 5)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: handleHeight)
+                    .contentShape(Rectangle())
+                    .gesture(dragGesture)
+                    .accessibilityHidden(true)
+            }
+            switch manager.type {
+            case .dynamic:
+                manager.content
+                    .frame(maxWidth: .infinity)
+                    .gesture(dragGesture)
+            case let .scrollView(height, showsIndicators):
+                PSScrollVIew(showsIndicators: showsIndicators, offsetChanged: {
+                    if $0.y > 60 { manager.dismiss() }
+                }) { manager.content }
+                .frame(height: max(0, min(height, availableHeight - handleHeight)))
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .frame(maxHeight: max(0, availableHeight), alignment: .top)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 10)
+            .updating($dragOffset) { value, state, _ in
+                state = max(0, value.translation.height)
+            }
+            .onEnded { value in
+                if value.translation.height > 60 || value.predictedEndTranslation.height > 120 {
+                    manager.dismiss()
+                }
+            }
     }
 }
